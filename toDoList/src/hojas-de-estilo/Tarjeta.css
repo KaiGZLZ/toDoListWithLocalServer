@@ -1,0 +1,139 @@
+.tarjeta-contenedor {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    width: 250px;
+    border: 2px solid rgb(212, 212, 212);
+    border-radius: 10px;
+    font-size: 16px;
+
+    box-shadow: 0 0 5px black;
+}
+
+/*  Parte superior */
+
+.parte-superior {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    background-color: rgb(236, 236, 236);
+    padding: 3.3% 0;
+    font-size: 230%; 
+    border-radius: 3.3% 3.3% 0 0;
+}
+
+.titulo-tarea {
+    padding: 0 7%;
+    margin: 0;
+}
+
+.prioridad {
+
+    font-size: 15px;   
+    color: white; 
+    background-color: rgb(194, 74, 74);
+    border-radius: 25px;
+    padding: 4px 8px;
+    margin-top: 6%;
+    box-shadow: 0 0 5px black;
+    text-transform: capitalize;
+}
+
+.prioridad-alta {
+    background-color: rgb(194, 74, 74);
+}
+.prioridad-media {
+    background-color:rgb(105, 105, 0);
+}
+.prioridad-baja {
+    background-color: rgb(20, 122, 20);
+}
+
+/*  Parte Media */
+
+.parte-media {
+
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 112px;
+    text-align: justify;
+    padding-bottom: 20px;
+    border: 2px solid rgb(212, 212, 212);
+    background-color: white;
+}
+
+.descripcion {
+    padding: 20px 20px 15px 20px;
+}
+
+.responsable {
+    
+    width: auto;
+    text-align: center;
+    margin: 10px 0 0 0;
+    font-weight: bold;
+    background-color: rgb(253, 253, 163);
+}
+
+/*  Parte inferior */
+
+.parte-inferior {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: rgb(236, 236, 236);
+    padding: 20px 0;
+    font-size: 40px;
+    border-radius: 0 0 10px 10px;
+}
+
+.boton-borrar {
+
+    font-size: 80%;   
+    color: white; 
+    background-color: rgb(197, 24, 24);
+    border-radius: 10px;
+    padding: 4px 8px;
+    margin-top: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 5px black;
+}
+
+@media (max-width: 450px) {
+    
+    .tarjeta-contenedor {
+
+        min-height: 200px;
+        width: 180px;
+        border: 2px solid rgb(212, 212, 212);
+        border-radius: 5px;
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .prioridad {
+
+        font-size: 60%;  
+    }
+
+    .parte-superior {
+        font-size: 130%; 
+    }
+    .boton-borrar {
+
+        font-size: 60%;  
+    }
+  }

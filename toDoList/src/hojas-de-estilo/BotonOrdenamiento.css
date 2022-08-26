@@ -1,0 +1,27 @@
+.boton {
+
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    height: 50px;
+    width: 50px;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: rgb(68, 68, 68);
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+    user-select: none;
+
+    z-index: 1; /* Sit on top */
+    position: fixed;
+    transform: translateX(240px) translateY(100px);
+}
+
+@media (max-width: 450px) {
+    
+    .boton {
+
+        transform: translateX(70px) translateY(70px);
+    }
+  }

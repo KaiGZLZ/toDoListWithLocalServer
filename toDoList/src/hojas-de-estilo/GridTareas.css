@@ -1,0 +1,16 @@
+.grid-tareas{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 230px);
+    gap: 50px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+@media (max-width: 450px) {
+    
+    .grid-tareas {
+
+        grid-template-columns: repeat(auto-fill, 100px);
+    }
+  }
