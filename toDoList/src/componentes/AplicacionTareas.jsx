@@ -1,9 +1,22 @@
 import { useState } from "react";
-import Formulario from "./Formulario";
 import "../hojas-de-estilo/AplicacionTareas.css"
+import {
+  BrowserRouter as Router,
+  Routes as Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
+//  COMPONENTES 
+
+
+import Formulario from "./Formulario";
 import GridTareas from "./GridTareas";
 import BotonOrdenamiento from "./BotonOrdenamiento";
+import CuadroInicio from "./CuadroInicio";
+import FormularioRegistro from "./FormularioRegistro";
+import FormularioInicioSesion from "./FormularioInicioSesion";
+
 
 
 function AplicacionTareas() {
@@ -74,7 +87,7 @@ function AplicacionTareas() {
     }
     else if(tipoOrdenamiento === 2){   // Por orden Descendente
 
-      const tareasActualizadas = tareaCopia.slice();
+      const tareasActualizadas = tareaCopia.slice(); 
 
       tareasActualizadas.sort((a, b) => b.prioridad - a.prioridad);
 
@@ -85,26 +98,47 @@ function AplicacionTareas() {
 
   return(
     <>
-      <BotonOrdenamiento
-        onPresionar={mostrarTareas}/>
+      <Router>
+        <BotonOrdenamiento
+          onPresionar={mostrarTareas}/>
 
-      <Formulario
-        onSubmit={agregarTarea}
-        />
+        <Formulario
+          onSubmit={agregarTarea}/>
 
-      <div className='contenedor-principal'>
-        
-        <div className="seccion-formulario">
-        </div>
-
-        <div className="seccion-tareas">
-          <div>
-            <GridTareas 
-              tareas={tareas}
-              borrarTarea={eliminarTarea}/>
-          </div>
-        </div>
-      </div>
+          <Switch>
+            <Route path="/otra" element={
+              <>
+                <div className="seccion-formulario">
+                  {/* Esta seccion deberá quedar vacia tal y como esta*/}
+                </div>
+                <div className='contenedor-principal'>
+                  <div className="seccion-tareas">
+                    <div>
+                      <GridTareas 
+                        tareas={tareas}
+                        borrarTarea={eliminarTarea}/>
+                    </div>
+                  </div>
+                </div>
+              </>
+              
+            }>
+            </Route>
+            <Route path="/" element={
+              <CuadroInicio />
+            }>
+            </Route> 
+            <Route path="/registro" element={
+              <FormularioRegistro />
+            }>
+            </Route>
+            <Route path="/login" element={
+              <FormularioInicioSesion />
+            }>
+            </Route>   
+          </Switch>
+          
+      </Router>
     </>
   );
 }

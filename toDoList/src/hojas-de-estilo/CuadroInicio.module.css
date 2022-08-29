@@ -1,0 +1,61 @@
+.contenedorPrincipal {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 400px;
+    padding: 10rem 40rem 0 0;
+}
+
+.controlEspacio {
+    min-width: 55rem;
+}
+
+.contenedorBotones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.prototipoBoton {
+    font-size: 5rem;
+    font-weight: bold;
+    border-radius: 1rem;
+    cursor: pointer;
+    margin: 2rem 0;
+    box-shadow: 0 0 5px black;
+    padding: 0.5rem 2rem;
+}
+.prototipoBoton:hover {
+    opacity: 0.8;
+    transition: 0.25s;
+}
+
+.botonIniciarSesion {
+    background-color: rgb(105, 184, 102);
+    text-align: inline;
+}
+
+.botonRegistrarse {
+    background-color: rgb(143, 75, 75);
+}
+
+
+@media (max-width: 450px) {
+    
+    .contenedorPrincipal {
+
+        padding: 10rem 0 0 0;
+    }
+    .controlEspacio {
+        min-width: 18rem;
+    }
+
+    .prototipoBoton {
+        font-size: 2.5rem;
+        border-radius: 1rem;
+        margin: 2rem 0;
+    }
+  }
