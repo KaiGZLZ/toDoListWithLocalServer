@@ -1,28 +1,59 @@
 import styles from '../hojas-de-estilo/FormularioInicioSesion.module.css'
 import { useState } from "react";
 import { AiFillCloseCircle } from 'react-icons/ai';
+import { useNavigate } from "react-router-dom";
 
 
 
-function FormularioInicioSesion( { isOpen, onSubmit, cerrarFormulario} ){
 
-  const [usuario, setUsuario] = useState("");
-  const [clave, setClave] = useState("");
+
+function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormulario} ){
+
+  const navigate = useNavigate(); //  Hook para cambiar el path del navegador
+
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const [estadoMensajeOculto, setEstadoMensajeOculto] = useState(true);
   
   
-  const manejarCambiosUsuario = e => { setUsuario(e.target.value) };
-  const manejarCambiosClave = e => { setClave(e.target.value) };
+  const manejarCambiosUsuario = e => { setUsername(e.target.value) };
+  const manejarCambiosClave = e => { setPassword(e.target.value) };
 
 
   const enviarDatos = e => {  //  Al presionar el boton
     e.preventDefault();
     const nuevoLogin = {
-      usuario: usuario,
-      clave: clave,
+      name: username,
+      password: password,
     }
-    onSubmit(nuevoLogin);
+
+  fetch('http://192.168.1.101:3000/user', {
+      method: 'POST', 
+      body: JSON.stringify(nuevoLogin), 
+      headers:{
+      'Content-Type': 'application/json'
+    }
+    }).then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(response => {
+      console.log(response.data);
+      console.log(JSON.parse(response.data));
+      if (response.result === false) {setEstadoMensajeOculto(false)}
+
+      else{ 
+        obtenerTareasDeUsuario(JSON.parse(response.data));
+        navigate('/user/'+username);
+      }
+    });
+  }
+
+  const outOfModal = () => {
+    setUsername("");
+    setPassword("");
+    setEstadoMensajeOculto(true);
+    cerrarFormulario(!isOpen);
   }
 
   return(
@@ -30,7 +61,7 @@ function FormularioInicioSesion( { isOpen, onSubmit, cerrarFormulario} ){
       
       <div className={styles.contenedorGeneral + (isOpen ? "" : " " + styles.modalSeOculta) }>
           <div className={styles.formularioContenedor + (isOpen ? "" : " " + styles.contenedorFormularioSeOculta) }>
-            <div className={styles.botonSalida} onClick={() => cerrarFormulario(!isOpen)}>
+            <div className={styles.botonSalida} onClick={outOfModal}>
               <AiFillCloseCircle />
             </div>
 
@@ -40,8 +71,8 @@ function FormularioInicioSesion( { isOpen, onSubmit, cerrarFormulario} ){
                 Inicio de sesion
               </p>
               
-              <input className={styles.entradaDeDatos} type="text" placeholder="Usuario" onChange={manejarCambiosUsuario}/>
-              <input className={styles.entradaDeDatos} type="text" placeholder="Clave" onChange={manejarCambiosClave}/>
+              <input className={styles.entradaDeDatos} type="text" value={username} placeholder="Usuario" onChange={manejarCambiosUsuario}/>
+              <input className={styles.entradaDeDatos} type="text" value={password} placeholder="Clave" onChange={manejarCambiosClave}/>
               
               <div className={styles.cajita}>
                 <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeOculto ? " " + styles.oculto : "")}>

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import FormularioInicioSesion from './FormularioInicioSesion';
 import FormularioRegistro from './FormularioRegistro';
 
-function CuadroInicio() {
+function CuadroInicio({ obtenerTareas }) {
 
   const [estadoFormularioInicioSesion, setEstadoFormularioInicioSesion] = useState(false);
   const [estadoFormularioRegistro, setEstadoFormularioRegistro] = useState(false);
@@ -27,6 +27,7 @@ function CuadroInicio() {
 
         <FormularioInicioSesion
           isOpen={estadoFormularioInicioSesion}
+          obtenerTareasDeUsuario={obtenerTareas}
           cerrarFormulario={setEstadoFormularioInicioSesion}
           />
 

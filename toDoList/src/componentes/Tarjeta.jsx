@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import "../hojas-de-estilo/Tarjeta.css"
 
 
@@ -9,6 +10,8 @@ function Tarjeta({ id, titulo, prioridad, descripcion, responsable, onBorrar}){
  
   //const valorPrioridad = () => ((prioridad == 0) ? 'baja' : (prioridad == 1) ? 'media' : 'alta');
 
+  const params = useParams();
+
   function valor() {
 
     if (prioridad == 0) return 'baja';
@@ -17,6 +20,30 @@ function Tarjeta({ id, titulo, prioridad, descripcion, responsable, onBorrar}){
 
     else return 'alta';
   }
+
+  const dataToSend = {
+    name: params.username,
+    idToDoToEliminate: id
+  }
+
+  const deleteToDo = () => {
+
+    console.log('Enviando mensaje');
+
+    fetch('http://192.168.1.101:3000/delete/tarea', {
+      method: 'DELETE', 
+      body: JSON.stringify(dataToSend), 
+      headers:{
+      'Content-Type': 'application/json'
+    }
+    }).then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(response => { console.log(response.description) }
+    );
+
+    onBorrar(id); //  Se borra en la pantalla*/
+  }
+
 
   return(
     <div>
@@ -39,7 +66,7 @@ function Tarjeta({ id, titulo, prioridad, descripcion, responsable, onBorrar}){
         </div>
 
         <div className='parte-inferior'>
-          <div className='boton-borrar' onClick={() => onBorrar(id)}>
+          <div className='boton-borrar' onClick={deleteToDo}>
             Borrar
           </div>
         </div>

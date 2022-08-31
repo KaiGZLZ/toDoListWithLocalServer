@@ -2,8 +2,11 @@ import React from "react";
 import "../hojas-de-estilo/Formulario.css"
 //import { useState } from "react";
 import { v4 as uuidv4} from "uuid"
+import { useParams } from "react-router-dom";
 
 function Formulario(props){
+
+  const params = useParams();
 
   var nombreTarea = '';
   var nombreDescripcion = '';
@@ -12,18 +15,35 @@ function Formulario(props){
 
   //const [nombreTareaEstado, setInput] = useState('');
 
-  const enviarDatos = e => {  //  Al presionar el boton
+  const sendData = e => {  //  Al presionar el boton
 
     e.preventDefault();
 
-    const tareaNueva = {
-      id: uuidv4(),
-      titulo: nombreTarea, 
-      descripcion: nombreDescripcion,
-      responsable: nombreResponsable,
-      prioridad: opcionPrioridad
+    const dataToSend = {
+      name: params.username,
+      tarea: {
+        id: uuidv4(),
+        title: nombreTarea, 
+        description: nombreDescripcion,
+        responsible: nombreResponsable,
+        priority: opcionPrioridad
+      }
     }
-    props.onSubmit(tareaNueva);
+
+    console.log(params);
+
+    fetch('http://192.168.1.101:3000/register/tarea', {
+      method: 'POST', 
+      body: JSON.stringify(dataToSend), 
+      headers:{
+      'Content-Type': 'application/json'
+    }
+    }).then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(response => { console.log(response.description) }
+    );
+
+    props.onSubmit(dataToSend.tarea);; //  Se borra en la pantalla*/
   }
 
   const setTarea = e => { nombreTarea = e.target.value; }
@@ -61,7 +81,7 @@ function Formulario(props){
             </div>
           </div>
         </div>
-        <button className='boton-submit' onClick={enviarDatos}> Enviar </button>
+        <button className='boton-submit' onClick={sendData}> Enviar </button>
       </form>
       </div>
     </div>

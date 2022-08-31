@@ -16,6 +16,7 @@ import BotonOrdenamiento from "./BotonOrdenamiento";
 import CuadroInicio from "./CuadroInicio";
 import FormularioRegistro from "./FormularioRegistro";
 import FormularioInicioSesion from "./FormularioInicioSesion";
+import BotonDeSalida from "./BotonDeSalida";
 
 
 
@@ -32,10 +33,10 @@ function AplicacionTareas() {
 
   const agregarTarea = tarea => {
 
-    if ((tarea.titulo.trim())&&(tarea.responsable.trim())){
+    if ((tarea.title.trim())&&(tarea.responsible.trim())){
 
-      tarea.titulo = tarea.titulo.trim();
-      tarea.responsable = tarea.responsable.trim();
+      tarea.title = tarea.title.trim();
+      tarea.responsible = tarea.responsible.trim();
 
       const tareasActualizadas = [tarea, ...tareasOriginales]; // De esta manera se une un objeto con un arreglo de objetos del mismo tipo
       
@@ -80,7 +81,7 @@ function AplicacionTareas() {
 
       const tareasActualizadas = tareaCopia.slice();
 
-      tareasActualizadas.sort((a, b) => a.prioridad - b.prioridad);
+      tareasActualizadas.sort((a, b) => a.priority - b.priority);
 
       setTareas(tareasActualizadas);
 
@@ -89,7 +90,7 @@ function AplicacionTareas() {
 
       const tareasActualizadas = tareaCopia.slice(); 
 
-      tareasActualizadas.sort((a, b) => b.prioridad - a.prioridad);
+      tareasActualizadas.sort((a, b) => b.priority - a.priority);
 
       setTareas(tareasActualizadas);
       
@@ -102,12 +103,14 @@ function AplicacionTareas() {
         <BotonOrdenamiento
           onPresionar={mostrarTareas}/>
 
-        <Formulario
-          onSubmit={agregarTarea}/>
-
           <Switch>
-            <Route path="/otra" element={
+            <Route path="/user/:username" element={
               <>
+              <Formulario
+                onSubmit={agregarTarea}/>
+
+              <BotonDeSalida/>
+
                 <div className="seccion-formulario">
                   {/* Esta seccion deberá quedar vacia tal y como esta*/}
                 </div>
@@ -125,17 +128,16 @@ function AplicacionTareas() {
             }>
             </Route>
             <Route path="/" element={
-              <CuadroInicio />
+              <>
+                <Formulario
+                  onSubmit={agregarTarea}/>
+
+                <CuadroInicio 
+                  obtenerTareas={(toDoListObtained) => {setTareasOriginales(toDoListObtained); setTareas(toDoListObtained);} }
+                  />
+              </>
             }>
             </Route> 
-            <Route path="/registro" element={
-              <FormularioRegistro />
-            }>
-            </Route>
-            <Route path="/login" element={
-              <FormularioInicioSesion />
-            }>
-            </Route>   
           </Switch>
           
       </Router>

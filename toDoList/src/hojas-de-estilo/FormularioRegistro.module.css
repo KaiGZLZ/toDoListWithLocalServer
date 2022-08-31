@@ -16,8 +16,9 @@
 
 .modalSeOculta{
     top: -100%;
-    transition-delay: 0.5s;
+    transition-delay: 1s;
 }
+
 
 .formularioContenedor {
     display: flex;
@@ -25,7 +26,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    z-index: 1; /* Sit on top */
+    z-index: 0; /* Sit on top */
     background-color: rgb(241, 241, 241);
     min-height: 40rem;
     min-width: 40rem;
@@ -36,7 +37,6 @@
     top: 0;
     
     box-shadow: 0 0 5px black;
-    z-index: 1; /* Sit on top */
 
     transition: 0.75s linear;
 }
@@ -45,6 +45,27 @@
     opacity: 0;
     transition: 0.5s;
 }
+
+.mensajeRegistroExitoso {
+    position: fixed;
+    text-align: center;
+    line-height: 14rem;
+    font-size: 10rem;
+    z-index: 1;
+    transform: translateY(-5rem);
+
+    border: 0.2rem solid black;
+    background-color: rgb(235, 235, 235);
+    border-radius: 1rem;
+    padding: 0 4rem;
+
+    transition: 0.5s;
+}
+.mensajeRegistroExitosoOculto {
+    visibility: hidden;
+    opacity: 0;
+}
+
 
 .botonSalida {
     position: absolute;
@@ -126,6 +147,17 @@
         min-width: 80%;
         padding: 3rem 0 2rem 0;
         box-shadow: 0 0 10px black;
+    }
+
+    .mensajeRegistroExitoso {
+        line-height: 8rem;
+        font-size: 7.5rem;
+        transform: translateY(-5rem);
+    
+        border: 0.2rem solid black;
+        border-radius: 1rem;
+        padding: 2.5rem 2rem;
+    
     }
     .botonSalida {
         right: 1rem;
