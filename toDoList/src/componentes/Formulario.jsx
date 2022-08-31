@@ -69,15 +69,15 @@ function Formulario(props){
           <div className="opciones-contenedor">
             <div className="opcion">
               <input type="radio" id="prioridadAlta" name="prioridad" value={0} onClick={setPrioridad}/>
-              <label for="prioridadAlta"> Baja</label>
+              <label htmlFor="prioridadAlta"> Baja</label>
             </div>
             <div className="opcion">
               <input type="radio" id="prioridadMedia" name="prioridad" value={1} onClick={setPrioridad}/>
-              <label for="prioridadMedia"> Media</label>
+              <label htmlFor="prioridadMedia"> Media</label>
             </div>
             <div className="opcion">
               <input type="radio" id="prioridadBaja" name="prioridad" value={2} onClick={setPrioridad}/>
-              <label for="prioridadBaja"> Alta</label>
+              <label htmlFor="prioridadBaja"> Alta</label>
             </div>
           </div>
         </div>

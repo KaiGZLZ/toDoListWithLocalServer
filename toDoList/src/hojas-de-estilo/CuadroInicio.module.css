@@ -16,7 +16,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
+    padding-top: 18rem;
 }
 
 .prototipoBoton {
@@ -46,8 +46,10 @@
 @media (max-width: 450px) {
     
     .contenedorPrincipal {
-
-        padding: 10rem 0 0 0;
+        padding: 9rem 0 0 0;
+    }
+    .contenedorBotones {
+        padding-top: 0;
     }
     .controlEspacio {
         min-width: 18rem;

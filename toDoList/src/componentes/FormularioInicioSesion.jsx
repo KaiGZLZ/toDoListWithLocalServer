@@ -72,7 +72,7 @@ function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormula
               </p>
               
               <input className={styles.entradaDeDatos} type="text" value={username} placeholder="Usuario" onChange={manejarCambiosUsuario}/>
-              <input className={styles.entradaDeDatos} type="text" value={password} placeholder="Clave" onChange={manejarCambiosClave}/>
+              <input className={styles.entradaDeDatos} type="password" value={password} placeholder="Clave" onChange={manejarCambiosClave}/>
               
               <div className={styles.cajita}>
                 <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeOculto ? " " + styles.oculto : "")}>

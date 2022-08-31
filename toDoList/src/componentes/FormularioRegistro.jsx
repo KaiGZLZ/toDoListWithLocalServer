@@ -8,20 +8,37 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
   const [estadoMensajeUsuarioExistenteOculto, setEstadoMensajeUsuarioExistenteOculto] = useState(true);
-  const [estadoMensajeOcultoClave, setEstadoMensajeClaveOculto] = useState(true);
+  const [estadoMensajeOcultoClaveMenorOchoDigitos, setEstadoMensajeOcultoClaveMenorOchoDigitos] = useState(true);
+  const [estadoMensajeOcultoNombreVacio, setEstadoMensajeOcultoNombreVacio] = useState(true);
+  const [estadoMensajeOcultoPasswordConfirmation, setEstadoMensajeOcultoPasswordConfirmation] = useState(true);
 
   const [estadoMensajeRegistroExitoso, setEstadoMensajeRegistroExitoso] = useState(false)
   
   
-  const manejarCambiosUsuario = e => { setUsername(e.target.value) };
-  const manejarCambiosClave = e => { setPassword(e.target.value) };
+  const manejarCambiosUsuario = e => { setUsername(e.target.value.trim()) };
+  const manejarCambiosClave = e => { setPassword(e.target.value.trim()) };
+  
+  const manejarCambiosPasswordConfirmation = e => { 
+    {(e.target.value.trim() == password) ? setEstadoMensajeOcultoPasswordConfirmation(true) : setEstadoMensajeOcultoPasswordConfirmation(false)} 
+    setPasswordConfirmation(e.target.value.trim());
+  };
 
 
   const sendRegisterData = e => {  //  Al presionar el boton
     
     e.preventDefault();
+
+    if (username == ""){
+      return setEstadoMensajeOcultoNombreVacio(false);
+    }
+
+    if (password.length < 8){
+      return setEstadoMensajeOcultoClaveMenorOchoDigitos(false);
+    }
+
     const nuevoRegistro = {
       name: username,
       password: password,
@@ -49,8 +66,11 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
   const outOfModal = () => {
     setUsername("");
     setPassword("");
-    setEstadoMensajeUsuarioExistenteOculto(true);
+    setPasswordConfirmation("");
     setEstadoMensajeRegistroExitoso(false);
+    setEstadoMensajeUsuarioExistenteOculto(true);
+    setEstadoMensajeOcultoClaveMenorOchoDigitos(true);
+    setEstadoMensajeOcultoNombreVacio(true);
     cerrarFormulario(!isOpen);
   }
 
@@ -84,22 +104,30 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
                 <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeUsuarioExistenteOculto ? " " + styles.oculto : "")}>
                   *El nombre de usuario ya es usado*
                 </p>
-              </div>
-
-              <input className={styles.entradaDeDatos} type="text" value={password} placeholder="Clave" onChange={manejarCambiosClave}/>
-              
-              <div className={styles.cajita}>
-                <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeOcultoClave ? " " + styles.oculto : "")}>
-                  *La contraseña debe ser de minimo 8 digitos*
+                <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeOcultoNombreVacio ? " " + styles.oculto : "")}>
+                  *El nombre no debe estar vacio*
                 </p>
               </div>
+
+              <input className={styles.entradaDeDatos} type="password" value={password} placeholder="Clave" onChange={manejarCambiosClave}/>
+              <div className={styles.cajita}>
+                <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeOcultoClaveMenorOchoDigitos ? " " + styles.oculto : "")}>
+                  *La contraseña debe ser de minimo 8 caracteres*
+                </p>
+              </div>
+              <input className={styles.entradaDeDatos} type="password" value={passwordConfirmation} placeholder="Confirme la clave" onChange={manejarCambiosPasswordConfirmation}/>
+              <div className={styles.cajita}>
+                <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeOcultoPasswordConfirmation ? " " + styles.oculto : "")}>
+                  *La confirmacion no coincide*
+                </p>
+              </div>
+
+
               
               <button className={styles.botonSubmit} onClick={sendRegisterData}> Registrar </button>
             </form>
           </div>
       </div>
-      
-      
     </div>
   );
 }

@@ -38,11 +38,11 @@ Content-Type: application/json
 {
     "name": "Rossy",
     "tarea": {
-      "id":"aaaaaa",
-      "title":"coger",
-      "description":"fuertemente el sabado",
-      "responsible": "Jesus Gonzalez",
-      "priority": 2
+      "id":"sdfa",
+      "title":"Ir al Gimnasio",
+      "description":"Ir todos los dias",
+      "responsible": "Rosangelica",
+      "priority": 0
       }
 }
 ### Eliminar una tarea
