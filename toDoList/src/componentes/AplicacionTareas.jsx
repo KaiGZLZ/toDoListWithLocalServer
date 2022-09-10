@@ -14,13 +14,14 @@ import Formulario from "./Formulario";
 import GridTareas from "./GridTareas";
 import BotonOrdenamiento from "./BotonOrdenamiento";
 import CuadroInicio from "./CuadroInicio";
-import FormularioRegistro from "./FormularioRegistro";
-import FormularioInicioSesion from "./FormularioInicioSesion";
 import BotonDeSalida from "./BotonDeSalida";
+import BotonEliminarCuenta from "./BotonEliminarCuenta";
 
 
 
 function AplicacionTareas() {
+
+  const ipServer = 'http://192.168.1.100:3000';
 
   const [tareasOriginales, setTareasOriginales] = useState([]); //  Tareas por orden de llegada 
   const [tareas, setTareas] = useState([]);                     //  Tareas a ser mostradas en pantalla
@@ -33,19 +34,15 @@ function AplicacionTareas() {
 
   const agregarTarea = tarea => {
 
-    if ((tarea.title.trim())&&(tarea.responsible.trim())){
+    tarea.title = tarea.title.trim();
+    tarea.responsible = tarea.responsible.trim();
 
-      tarea.title = tarea.title.trim();
-      tarea.responsible = tarea.responsible.trim();
+    const tareasActualizadas = [tarea, ...tareasOriginales]; // De esta manera se une un objeto con un arreglo de objetos del mismo tipo
+    
+    setTareasOriginales(tareasActualizadas);
 
-      const tareasActualizadas = [tarea, ...tareasOriginales]; // De esta manera se une un objeto con un arreglo de objetos del mismo tipo
-      
-      setTareasOriginales(tareasActualizadas);
-
-      tareasOriginalesCopia = tareasActualizadas.slice();
-      mostrarTareas(tipoDeOrdenamiento);
-      
-    }
+    tareasOriginalesCopia = tareasActualizadas.slice();
+    mostrarTareas(tipoDeOrdenamiento);
   }
 
   const eliminarTarea = id => {
@@ -107,9 +104,14 @@ function AplicacionTareas() {
             <Route path="/user/:username" element={
               <>
               <Formulario
-                onSubmit={agregarTarea}/>
+                onSubmit={agregarTarea}
+                ipServer={ipServer}/>
 
               <BotonDeSalida/>
+
+              <BotonEliminarCuenta
+                ipServer={ipServer}
+                />
 
                 <div className="seccion-formulario">
                   {/* Esta seccion deberá quedar vacia tal y como esta*/}
@@ -119,7 +121,9 @@ function AplicacionTareas() {
                     <div>
                       <GridTareas 
                         tareas={tareas}
-                        borrarTarea={eliminarTarea}/>
+                        borrarTarea={eliminarTarea}
+                        ipServer={ipServer}
+                        />
                     </div>
                   </div>
                 </div>
@@ -130,10 +134,13 @@ function AplicacionTareas() {
             <Route path="/" element={
               <>
                 <Formulario
-                  onSubmit={agregarTarea}/>
+                  onSubmit={agregarTarea}
+                  ipServer={ipServer}
+                  />
 
                 <CuadroInicio 
                   obtenerTareas={(toDoListObtained) => {setTareasOriginales(toDoListObtained); setTareas(toDoListObtained);} }
+                  ipServer={ipServer}
                   />
               </>
             }>

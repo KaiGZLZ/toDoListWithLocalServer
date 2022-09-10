@@ -74,7 +74,7 @@ server.post('/register/tarea', (req,res) => { //  Lo que sucede al momento de pr
 
   if (indexUserOwner >= 0){ //  Ya hay una persona con ese nombre
     
-    data.users[indexUserOwner].tareas.push(newToDo) //  Se agrega una nueva tarea al usuario
+    data.users[indexUserOwner].tareas.unshift(newToDo) //  Se agrega una nueva tarea al usuario
     saveData(JSON.stringify(data.users));
     res.send({"result": true, "description":'Tarea agregada correctamente'});
     return;
@@ -115,45 +115,21 @@ server.delete('/delete/tarea', (req,res) => { //  Lo que sucede al momento de el
 
 server.delete('/delete/user', (req,res) => { //  Lo que sucede al momento de presionar "Eliminar Usuario" en el formulario de registro
 
-  let userNameToDelete = req.body.name;
-  let password = req.body.password;
+  let usernameToDelete = req.body.name;
+  let passwordUsernameToDelete = req.body.password;
 
-  const indexUserNameToDelete = data.users.findIndex((user) => (user.name == userNameToDelete)&&(user.password == password))
+  const indexUserNameToDelete = data.users.findIndex((user) => (user.name == usernameToDelete)&&(user.password == passwordUsernameToDelete))
 
   if (indexUserNameToDelete >= 0){ //  Ya hay una persona con ese nombre
     data.users.splice(indexUserNameToDelete, 1); //  Se agrega un nuevo usuario a la lista
     saveData(JSON.stringify(data.users));
-    console.log('Usuario eliminado exitosamente');
+    res.send({"result": true, "description":'Usuario eliminado correctamente'});
     return;
-  }
-  console.log('La contraseña fue incorrecta');
+  } else{
+    res.send({"result": false, "description":'La contraseña es incorrecta'});
+  };
 })
 
-
-
-
-/*  FUNCION POST PARA PRUEBA */
-
-server.get('/prueba', (req,res) => { 
-  
-  console.log(req.body);
-  res.body('La respuesta tambien es exitosa ')
-})
-server.post('/prueba', (req,res) => { 
-
-  console.log(req.body);
-  
-  setTimeout((() => {
-    res.send({"response":'la respuesta llegó satisfactoriamente'});
-  }), 3000)
-
-  
-  
-})
-server.delete('/prueba', (req,res) => { 
-  
-  console.log(req.body);
-})
 
 
 //  SECCION PARA ACTIVAR EL SERVIDOR

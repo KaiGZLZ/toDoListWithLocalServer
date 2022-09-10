@@ -4,7 +4,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
 
 
-function FormularioRegistro( { isOpen, cerrarFormulario} ) {
+function FormularioRegistro( { isOpen, cerrarFormulario, ipServer} ) {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +26,6 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
     setPasswordConfirmation(e.target.value.trim());
   };
 
-
   const sendRegisterData = e => {  //  Al presionar el boton
     
     e.preventDefault();
@@ -45,7 +44,7 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
       tareas: []
     }
 
-    fetch('http://192.168.1.101:3000/register/user', {
+    fetch(ipServer + '/register/user', {
       method: 'POST', 
       body: JSON.stringify(nuevoRegistro), 
       headers:{
@@ -54,7 +53,6 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
     }).then(res => res.json())
     .catch(error => console.error('Error:', error))
     .then(response => {
-      console.log(response);
       if (response.result === false) {setEstadoMensajeUsuarioExistenteOculto(false)}
 
       else{ 
@@ -63,7 +61,7 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
     });
   }
 
-  const outOfModal = () => {
+  const outOfModal = () => {  //  Al salir del modal, se resetea todo
     setUsername("");
     setPassword("");
     setPasswordConfirmation("");

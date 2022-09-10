@@ -4,10 +4,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { useNavigate } from "react-router-dom";
 
 
-
-
-
-function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormulario} ){
+function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormulario, ipServer} ){
 
   const navigate = useNavigate(); //  Hook para cambiar el path del navegador
 
@@ -29,7 +26,7 @@ function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormula
       password: password,
     }
 
-  fetch('http://192.168.1.101:3000/user', {
+  fetch(ipServer + '/user', {
       method: 'POST', 
       body: JSON.stringify(nuevoLogin), 
       headers:{
@@ -38,8 +35,6 @@ function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormula
     }).then(res => res.json())
     .catch(error => console.error('Error:', error))
     .then(response => {
-      console.log(response.data);
-      console.log(JSON.parse(response.data));
       if (response.result === false) {setEstadoMensajeOculto(false)}
 
       else{ 
@@ -84,8 +79,6 @@ function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormula
             </form>
           </div>
       </div>
-      
-      
     </div>
   );
 }

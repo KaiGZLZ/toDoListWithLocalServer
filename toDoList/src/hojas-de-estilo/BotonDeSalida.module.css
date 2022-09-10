@@ -16,3 +16,13 @@
     left: 19rem;
     
 }
+
+@media (max-width: 450px) {
+
+    .botonSalida {
+
+        font-size: 3rem;
+        top: 48rem;
+        left: 3.7rem;
+    }
+}

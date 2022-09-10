@@ -1,7 +1,7 @@
 import Tarjeta from "./Tarjeta";
 import "../hojas-de-estilo/GridTareas.css";
 
-function GridTareas({ tareas , borrarTarea}) {
+function GridTareas({ tareas , borrarTarea, ipServer}) {
 
   return(
     <ul className='grid-tareas'>
@@ -16,6 +16,7 @@ function GridTareas({ tareas , borrarTarea}) {
             responsable={tarea.responsible}      
 
             onBorrar={borrarTarea}
+            ipServer={ipServer}
               />
         )
       };

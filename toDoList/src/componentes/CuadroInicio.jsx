@@ -4,7 +4,7 @@ import { useState } from 'react';
 import FormularioInicioSesion from './FormularioInicioSesion';
 import FormularioRegistro from './FormularioRegistro';
 
-function CuadroInicio({ obtenerTareas }) {
+function CuadroInicio({ obtenerTareas, ipServer }) {
 
   const [estadoFormularioInicioSesion, setEstadoFormularioInicioSesion] = useState(false);
   const [estadoFormularioRegistro, setEstadoFormularioRegistro] = useState(false);
@@ -29,6 +29,7 @@ function CuadroInicio({ obtenerTareas }) {
           isOpen={estadoFormularioInicioSesion}
           obtenerTareasDeUsuario={obtenerTareas}
           cerrarFormulario={setEstadoFormularioInicioSesion}
+          ipServer={ipServer}
           />
 
         <button 
@@ -40,6 +41,7 @@ function CuadroInicio({ obtenerTareas }) {
         <FormularioRegistro
           isOpen={estadoFormularioRegistro}
           cerrarFormulario={setEstadoFormularioRegistro}
+          ipServer={ipServer}
           />
 
       </div>

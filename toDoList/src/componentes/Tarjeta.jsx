@@ -6,7 +6,7 @@ import "../hojas-de-estilo/Tarjeta.css"
 
 
 
-function Tarjeta({ id, titulo, prioridad, descripcion, responsable, onBorrar}){
+function Tarjeta({ id, titulo, prioridad, descripcion, responsable, onBorrar, ipServer}){
  
   //const valorPrioridad = () => ((prioridad == 0) ? 'baja' : (prioridad == 1) ? 'media' : 'alta');
 
@@ -30,7 +30,7 @@ function Tarjeta({ id, titulo, prioridad, descripcion, responsable, onBorrar}){
 
     console.log('Enviando mensaje');
 
-    fetch('http://192.168.1.101:3000/delete/tarea', {
+    fetch(ipServer + '/delete/tarea', {
       method: 'DELETE', 
       body: JSON.stringify(dataToSend), 
       headers:{
