@@ -38,7 +38,7 @@ function BotonEliminarCuenta(props) {
     }).then(res => res.json())
     .catch(error => console.error('Error:', error))
     .then(response => {
-      if(response.result == false){
+      if(response.result === false){
         setHiddenMessagePasswordState(false);
       } else {
         console.log('Usuario Eliminado');
@@ -48,11 +48,8 @@ function BotonEliminarCuenta(props) {
   }
 
   return(
-
     <>
-      
         <button className={style.botonEliminar} onClick={() => setIsOpen(!isOpen)}>Eliminar cuenta</button>
-
 
         <div className={style.contenedorGeneral + (isOpen ? "" : " " + style.modalSeOculta) }>
           <div className={style.formularioContenedor + (isOpen ? "" : " " + style.contenedorFormularioSeOculta) }>

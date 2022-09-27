@@ -3,8 +3,7 @@ import "../hojas-de-estilo/AplicacionTareas.css"
 import {
   BrowserRouter as Router,
   Routes as Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 
 //  COMPONENTES 

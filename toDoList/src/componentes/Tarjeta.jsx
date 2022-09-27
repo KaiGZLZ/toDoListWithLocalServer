@@ -12,15 +12,6 @@ function Tarjeta({ id, titulo, prioridad, descripcion, responsable, onBorrar, ip
 
   const params = useParams();
 
-  function valor() {
-
-    if (prioridad == 0) return 'baja';
-    
-    else if (prioridad == 1) return 'media';
-
-    else return 'alta';
-  }
-
   const dataToSend = {
     name: params.username,
     idToDoToEliminate: id

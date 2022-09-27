@@ -6,10 +6,9 @@ import { BiLogOut } from 'react-icons/bi';
 function BotonDeSalida() {
 
   return(
-
     <>
       <Link to='/'>
-        <button className={style.botonSalida}><BiLogOut margin='2rem' />{" " + "Salir"}</button>
+        <button className={style.botonSalida}><BiLogOut margin='2rem' />Salir</button>
       </Link>
     </>
   );
