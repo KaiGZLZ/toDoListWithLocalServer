@@ -79,7 +79,7 @@ function Formulario(props){
           />
 
         <div className="opciones-prioridad">
-          <p>Prioridad</p>
+          <p className="titulo-Prioridad">Prioridad</p>
           <div className="opciones-contenedor">
             <div className="opcion">
               <input type="radio" id="prioridadAlta" name="prioridad" value={0} onClick={ e => setToDo({...toDo, ...{priority: e.target.value} })}/>

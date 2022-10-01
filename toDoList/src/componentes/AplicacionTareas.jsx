@@ -8,7 +8,6 @@ import {
 
 //  COMPONENTES 
 
-
 import Formulario from "./Formulario";
 import GridTareas from "./GridTareas";
 import BotonOrdenamiento from "./BotonOrdenamiento";
@@ -17,10 +16,9 @@ import BotonDeSalida from "./BotonDeSalida";
 import BotonEliminarCuenta from "./BotonEliminarCuenta";
 
 
-
 function AplicacionTareas() {
 
-  const ipServer = 'http://192.168.1.100:3000';
+  const ipServer = 'http://192.168.1.101:3000';
 
   const [tareasOriginales, setTareasOriginales] = useState([]); //  Tareas por orden de llegada 
   const [tareas, setTareas] = useState([]);                     //  Tareas a ser mostradas en pantalla
@@ -96,12 +94,12 @@ function AplicacionTareas() {
   return(
     <>
       <Router>
-        <BotonOrdenamiento
-          onPresionar={mostrarTareas}/>
+        <Switch>
+          <Route path="/user/:username" element={
+            <>
+              <BotonOrdenamiento
+                onPresionar={mostrarTareas}/>
 
-          <Switch>
-            <Route path="/user/:username" element={
-              <>
               <Formulario
                 onSubmit={agregarTarea}
                 ipServer={ipServer}/>
@@ -112,40 +110,39 @@ function AplicacionTareas() {
                 ipServer={ipServer}
                 />
 
-                <div className="seccion-formulario">
-                  {/* Esta seccion deberá quedar vacia tal y como esta*/}
-                </div>
-                <div className='contenedor-principal'>
-                  <div className="seccion-tareas">
-                    <div>
-                      <GridTareas 
-                        tareas={tareas}
-                        borrarTarea={eliminarTarea}
-                        ipServer={ipServer}
-                        />
-                    </div>
+              <div className="seccion-formulario">
+                {/* Esta seccion deberá quedar vacia tal y como esta*/}
+              </div>
+              <div className='contenedor-principal'>
+                <div className="seccion-tareas">
+                  <div>
+                    <GridTareas 
+                      tareas={tareas}
+                      borrarTarea={eliminarTarea}
+                      ipServer={ipServer}
+                      />
                   </div>
                 </div>
-              </>
-              
-            }>
-            </Route>
-            <Route path="/" element={
-              <>
-                <Formulario
-                  onSubmit={agregarTarea}
-                  ipServer={ipServer}
-                  />
+              </div>
+            </>
+            
+          }>
+          </Route>
+          <Route path="/" element={
+            <>
+              <Formulario
+                onSubmit={agregarTarea}
+                ipServer={ipServer}
+                />
 
-                <CuadroInicio 
-                  obtenerTareas={(toDoListObtained) => {setTareasOriginales(toDoListObtained); setTareas(toDoListObtained);} }
-                  ipServer={ipServer}
-                  />
-              </>
-            }>
-            </Route> 
-          </Switch>
-          
+              <CuadroInicio 
+                obtenerTareas={(toDoListObtained) => {setTareasOriginales(toDoListObtained); setTareas(toDoListObtained);} }
+                ipServer={ipServer}
+                />
+            </>
+          }>
+          </Route> 
+        </Switch>
       </Router>
     </>
   );

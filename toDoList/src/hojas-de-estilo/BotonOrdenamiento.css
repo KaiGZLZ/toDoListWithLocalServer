@@ -15,7 +15,7 @@
 
     z-index: 1; /* Sit on top */
     position: fixed;
-    transform: translateX(240px) translateY(100px);
+    transform: translateX(240px) translateY(50px);
 }
 
 @media (max-width: 450px) {

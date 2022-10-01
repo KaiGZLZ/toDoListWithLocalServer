@@ -1,6 +1,6 @@
 import styles from '../hojas-de-estilo/FormularioRegistro.module.css'
 import { useState } from "react";
-import { AiFillCloseCircle } from 'react-icons/ai';
+import { AiFillCloseCircle, AiFillPlaySquare } from 'react-icons/ai';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
 
 
@@ -36,6 +36,10 @@ function FormularioRegistro( { isOpen, cerrarFormulario, ipServer} ) {
 
     if (password.length < 8){
       return setEstadoMensajeOcultoClaveMenorOchoDigitos(false);
+    }
+
+    if (password !== passwordConfirmation){
+      return setEstadoMensajeOcultoPasswordConfirmation(false)
     }
 
     const nuevoRegistro = {
@@ -95,7 +99,6 @@ function FormularioRegistro( { isOpen, cerrarFormulario, ipServer} ) {
                 Registro <br/>de Usuario
               </p>
               
-              
               <input className={styles.entradaDeDatos} type="text" value={username} placeholder="Usuario" onChange={manejarCambiosUsuario}/>
               
               <div className={styles.cajita}>
@@ -119,8 +122,6 @@ function FormularioRegistro( { isOpen, cerrarFormulario, ipServer} ) {
                   *La confirmacion no coincide*
                 </p>
               </div>
-
-
               
               <button className={styles.botonSubmit} onClick={sendRegisterData}> Registrar </button>
             </form>
