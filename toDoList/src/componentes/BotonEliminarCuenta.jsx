@@ -77,7 +77,7 @@ function BotonEliminarCuenta(props) {
               
               <div className={style.cajita}>
                 <p className={style.avisoUsuarioOContraseñaIncorrecta + (hiddenMessagePasswordState ? " " + style.oculto : "")}>
-                  *El usuario o la contraseña ingresada fueron incorrectos*
+                  *La contraseña ingresada es incorrecta*
                 </p>
               </div>
               

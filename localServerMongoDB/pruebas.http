@@ -1,0 +1,149 @@
+### Agregar un nuevo usuario
+
+POST http://localhost:3000/register/user HTTP/1.1    
+Content-Type: application/json
+
+{
+    "name": "inge",
+    "password": "12345"
+}
+
+### Solicitud de LOGEO en la aplicacion
+GET http://localhost:3000/user HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "inge",
+    "password": "12345"
+}
+
+### Agregar una nueva tarea
+POST http://localhost:3000/register/tarea HTTP/1.1    
+Content-Type: application/json
+
+{
+    "name": "inge",
+    
+    "tarea": {
+      "id":"xx",
+      "title": "Tarea 4",
+      "description":"Tarea 2",
+      "responsible": "ffdfd",
+      "priority": 0
+      }
+}
+
+
+
+
+
+
+
+
+
+
+
+### Eliminar un usuario
+DELETE http://localhost:3000/delete/all HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "rossy"
+}
+
+### Agregar una nueva tarea
+POST http://localhost:3000/register/tarea HTTP/1.1    
+Content-Type: application/json
+
+{
+    "name": "inge",
+    
+    "tarea": {
+      "id":"xx",
+      "title": "Tarea 4",
+      "description":"Tarea 2",
+      "responsible": "ffdfd",
+      "priority": 0
+      }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Agregar un nuevo usuario
+
+
+POST http://localhost:3000/ HTTP/1.1    
+Content-Type: application/json
+
+{
+    "name": "JORGE",
+    "password": "12345",
+    "tareas": [{
+      "id":"xxx",
+      "name":"hacer tarea",
+      "description":"Hacer la tarea en la noche",
+      "responsible": "Jesus Gonzalez",
+      "priority": 1
+      }]
+}
+### Eliminar un usuario
+DELETE http://localhost:3000/user/jesus HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "JORGE",
+    "password": "12345"
+}
+
+### Solicitud de LOGEO en la aplicacion
+GET http://localhost:3000/user HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Rossy",
+    "password": "54321"
+}
+
+### Agregar una nueva tarea
+POST http://localhost:3000/register/tarea HTTP/1.1    
+Content-Type: application/json
+
+{
+    "name": "Rossy",
+    "tarea": {
+      "id":"sdfa",
+      "title":"Ir al Gimnasio",
+      "description":"Ir todos los dias",
+      "responsible": "Rosangelica",
+      "priority": 0
+      }
+}
+### Eliminar una tarea
+DELETE http://localhost:3000/delete/tarea HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Rossy",
+    "id": "xxx"
+}

@@ -66,15 +66,24 @@ function FormularioRegistro( { isOpen, cerrarFormulario, ipServer} ) {
   }
 
   const outOfModal = () => {  //  Al salir del modal, se resetea todo
+    
     setUsername("");
     setPassword("");
     setPasswordConfirmation("");
     setEstadoMensajeRegistroExitoso(false);
     setEstadoMensajeUsuarioExistenteOculto(true);
     setEstadoMensajeOcultoClaveMenorOchoDigitos(true);
+    setEstadoMensajeOcultoPasswordConfirmation(true)
     setEstadoMensajeOcultoNombreVacio(true);
     cerrarFormulario(!isOpen);
   }
+
+
+  const clickException = (e) => {  //  El click no se propaga hacia atras
+    
+    e.stopPropagation();
+  }
+
 
   const registroExitoso = () => {
     setEstadoMensajeRegistroExitoso(true);
@@ -83,12 +92,12 @@ function FormularioRegistro( { isOpen, cerrarFormulario, ipServer} ) {
 
   return(
     <div>
-      <div className={styles.contenedorGeneral + (isOpen ? "" : " " + styles.modalSeOculta) }>
+      <div className={styles.contenedorGeneral + (isOpen ? "" : " " + styles.modalSeOculta) } onClick={outOfModal}>
 
         <div className={styles.mensajeRegistroExitoso + (estadoMensajeRegistroExitoso ? "" : " " + styles.mensajeRegistroExitosoOculto) } >
           Registro exitoso<br/><BsFillCheckCircleFill color='green'/>
         </div>
-          <div className={styles.formularioContenedor + (isOpen ? "" : " " + styles.contenedorFormularioSeOculta) }>
+          <div className={styles.formularioContenedor + (isOpen ? "" : " " + styles.contenedorFormularioSeOculta) } onClick={clickException}>
             <div className={styles.botonSalida} onClick={outOfModal}>
               <AiFillCloseCircle />
             </div>

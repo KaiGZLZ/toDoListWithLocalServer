@@ -26,12 +26,12 @@ function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormula
       password: password,
     }
 
-  fetch(ipServer + '/user', {
+    fetch(ipServer + '/user', {
       method: 'POST', 
       body: JSON.stringify(nuevoLogin), 
       headers:{
-      'Content-Type': 'application/json'
-    }
+        'Content-Type': 'application/json'
+      }
     }).then(res => res.json())
     .catch(error => console.error('Error:', error))
     .then(response => {
@@ -51,11 +51,15 @@ function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormula
     cerrarFormulario(!isOpen);
   }
 
+  const clickException = (e) => {  //  El click no se propaga hacia atras
+    
+    e.stopPropagation();
+  }
+
   return(
     <div>
-      
-      <div className={styles.contenedorGeneral + (isOpen ? "" : " " + styles.modalSeOculta) }>
-          <div className={styles.formularioContenedor + (isOpen ? "" : " " + styles.contenedorFormularioSeOculta) }>
+      <div className={styles.contenedorGeneral + (isOpen ? "" : " " + styles.modalSeOculta) } onClick={outOfModal}>
+          <div className={styles.formularioContenedor + (isOpen ? "" : " " + styles.contenedorFormularioSeOculta) } onClick={clickException}>
             <div className={styles.botonSalida} onClick={outOfModal}>
               <AiFillCloseCircle />
             </div>

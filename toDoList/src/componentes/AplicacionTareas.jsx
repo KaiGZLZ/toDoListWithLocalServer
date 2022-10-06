@@ -18,7 +18,7 @@ import BotonEliminarCuenta from "./BotonEliminarCuenta";
 
 function AplicacionTareas() {
 
-  const ipServer = 'http://192.168.1.101:3000';
+  const ipServer = 'http://192.168.1.102:3000';
 
   const [tareasOriginales, setTareasOriginales] = useState([]); //  Tareas por orden de llegada 
   const [tareas, setTareas] = useState([]);                     //  Tareas a ser mostradas en pantalla

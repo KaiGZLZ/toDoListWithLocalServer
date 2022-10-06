@@ -30,7 +30,7 @@ function Formulario(props){
         title: toDo.title.trim(), 
         description: toDo.description.trim(),
         responsible: toDo.responsible.trim(),
-        priority: toDo.priority
+        priority: (toDo.priority === '' ? 0 : toDo.priority)
       }
     /*  NOTA: Si los campos tuviesen el mismo nombre, se pudiesen colocar de la siguiente manera
       tarea: {
@@ -47,13 +47,18 @@ function Formulario(props){
       'Content-Type': 'application/json'
     }
     }).then(res => res.json())
-    .catch(error => console.error('Error:', error))
-    .then(response => { console.log(response.description) }
-    );
-
-    props.onSubmit(dataToSend.tarea);; //  Se borra en la pantalla*/
-
-    setToDo({...toDo, ...{title: '', description: '', responsible: '', priority: ''} });
+        .then(response => { 
+          console.log(response.description) 
+          
+          if (response.result === true){
+            props.onSubmit(dataToSend.tarea); //  Se borra en la pantalla*/
+            setToDo({...toDo, ...{title: '', description: '', responsible: '', priority: ''} });
+          }
+          else{
+            alert('The ToDo must have Title and Priority')
+          }
+        })
+        .catch(error => console.error('Error:', error));
   }
 
   return(
