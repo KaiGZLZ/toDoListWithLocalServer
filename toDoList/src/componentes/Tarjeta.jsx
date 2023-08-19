@@ -21,7 +21,7 @@ function Tarjeta({ id, titulo, prioridad, descripcion, responsable, onBorrar, ip
 
     console.log('Enviando mensaje');
 
-    fetch(ipServer + '/delete/tarea', {
+    fetch(ipServer + '/task/delete', {
       method: 'DELETE', 
       body: JSON.stringify(dataToSend), 
       headers:{

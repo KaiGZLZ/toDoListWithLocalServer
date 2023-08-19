@@ -2,9 +2,10 @@ import styles from '../hojas-de-estilo/FormularioInicioSesion.module.css'
 import { useState } from "react";
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { useNavigate } from "react-router-dom";
+import { apiUrl } from '../config/config';
 
 
-function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormulario, ipServer} ){
+function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormulario} ){
 
   const navigate = useNavigate(); //  Hook para cambiar el path del navegador
 
@@ -21,26 +22,28 @@ function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormula
 
   const enviarDatos = e => {  //  Al presionar el boton
     e.preventDefault();
-    const nuevoLogin = {
+    const userRequested = {
       name: username,
       password: password,
     }
 
-    fetch(ipServer + '/user', {
+    fetch(apiUrl + '/user/authenticate', {
       method: 'POST', 
-      body: JSON.stringify(nuevoLogin), 
+      body: JSON.stringify({userRequested}), 
       headers:{
         'Content-Type': 'application/json'
       }
     }).then(res => res.json())
-    .catch(error => console.error('Error:', error))
+    .catch(error => {
+      console.error('Error:', error)
+      setEstadoMensajeOculto(false)
+    })
     .then(response => {
-      if (response.result === false) {setEstadoMensajeOculto(false)}
 
-      else{ 
-        obtenerTareasDeUsuario(JSON.parse(response.data));
-        navigate('/user/'+username);
-      }
+      console.log(response);
+      obtenerTareasDeUsuario(response.user.tasks);
+      navigate('/user/'+ username);
+      
     });
   }
 
@@ -70,8 +73,18 @@ function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormula
                 Inicio de sesion
               </p>
               
-              <input className={styles.entradaDeDatos} type="text" value={username} placeholder="Usuario" onChange={manejarCambiosUsuario}/>
-              <input className={styles.entradaDeDatos} type="password" value={password} placeholder="Clave" onChange={manejarCambiosClave}/>
+              <input className={styles.entradaDeDatos} 
+                type="text" value={username} 
+                placeholder="Usuario" 
+                onChange={manejarCambiosUsuario}
+                />
+                
+              <input className={styles.entradaDeDatos} 
+                type="password" 
+                value={password} 
+                placeholder="Clave" 
+                onChange={manejarCambiosClave}
+                />
               
               <div className={styles.cajita}>
                 <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeOculto ? " " + styles.oculto : "")}>

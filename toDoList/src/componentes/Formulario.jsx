@@ -25,7 +25,7 @@ function Formulario(props){
 
     const dataToSend = {
       name: params.username,
-      tarea: {
+      task: {
         id: uuidv4(),
         title: toDo.title.trim(), 
         description: toDo.description.trim(),
@@ -40,7 +40,7 @@ function Formulario(props){
       } */
     }
 
-    fetch(props.ipServer + '/register/tarea', {
+    fetch(props.ipServer + '/task/register', {
       method: 'POST', 
       body: JSON.stringify(dataToSend), 
       headers:{
@@ -51,7 +51,7 @@ function Formulario(props){
           console.log(response.description) 
           
           if (response.result === true){
-            props.onSubmit(dataToSend.tarea); //  Se borra en la pantalla*/
+            props.onSubmit(dataToSend.task); //  Se borra en la pantalla*/
             setToDo({...toDo, ...{title: '', description: '', responsible: '', priority: ''} });
           }
           else{

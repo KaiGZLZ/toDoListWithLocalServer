@@ -2,9 +2,10 @@ import styles from '../hojas-de-estilo/FormularioRegistro.module.css'
 import { useState } from "react";
 import { AiFillCloseCircle, AiFillPlaySquare } from 'react-icons/ai';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
+import { apiUrl } from '../config/config';
 
 
-function FormularioRegistro( { isOpen, cerrarFormulario, ipServer} ) {
+function FormularioRegistro( { isOpen, cerrarFormulario} ) {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -42,15 +43,14 @@ function FormularioRegistro( { isOpen, cerrarFormulario, ipServer} ) {
       return setEstadoMensajeOcultoPasswordConfirmation(false)
     }
 
-    const nuevoRegistro = {
+    const user = {
       name: username,
-      password: password,
-      tareas: []
+      password: password
     }
 
-    fetch(ipServer + '/register/user', {
+    fetch( apiUrl + '/user/register', {
       method: 'POST', 
-      body: JSON.stringify(nuevoRegistro), 
+      body: JSON.stringify({user}), 
       headers:{
         'Content-Type': 'application/json'
       }

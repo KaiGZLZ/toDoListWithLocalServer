@@ -1,1 +1,0 @@
-let data = {'users':[]}; module.exports = data;
