@@ -45,7 +45,8 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
 
     const user = {
       name: username,
-      password: password
+      password,
+      passwordConfirmation
     }
 
     fetch( apiUrl + '/user/register', {

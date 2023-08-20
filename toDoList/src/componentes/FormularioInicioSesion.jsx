@@ -20,31 +20,33 @@ function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormula
   const manejarCambiosClave = e => { setPassword(e.target.value) };
 
 
-  const enviarDatos = e => {  //  Al presionar el boton
+  const enviarDatos = async e => {  //  Al presionar el boton
     e.preventDefault();
     const userRequested = {
       name: username,
       password: password,
     }
 
-    fetch(apiUrl + '/user/authenticate', {
+    const response = await fetch(apiUrl + '/user/authenticate', {
       method: 'POST', 
       body: JSON.stringify({userRequested}), 
       headers:{
         'Content-Type': 'application/json'
       }
-    }).then(res => res.json())
-    .catch(error => {
-      console.error('Error:', error)
-      setEstadoMensajeOculto(false)
     })
-    .then(response => {
 
-      console.log(response);
-      obtenerTareasDeUsuario(response.user.tasks);
-      navigate('/user/'+ username);
-      
-    });
+    await response.text().then(data => {
+      if (response.ok) {
+
+        let result = JSON.parse(data)
+        obtenerTareasDeUsuario(result.user.tasks);
+        navigate('/user/'+ username);
+      }
+      else{
+        console.log(JSON.parse(data));
+        setEstadoMensajeOculto(false)
+      }
+    })    
   }
 
   const outOfModal = () => {

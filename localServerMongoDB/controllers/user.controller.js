@@ -1,12 +1,13 @@
 
 const express = require('express');
 const userService = require('../services/user.service');
+const { userRegisterValidation, userDeleteValidation, userAuthenticateValidation } = require('../validators/user.validator');
 const router = express.Router();
 
 // routes
-router.post('/register', userRegister);
-router.delete('/delete', userDelete);
-router.post('/authenticate', userAuthenticate);
+router.post('/register', userRegisterValidation, userRegister);
+router.delete('/delete', userDeleteValidation, userDelete);
+router.post('/authenticate', userAuthenticateValidation, userAuthenticate);
 
 module.exports = router;
 
