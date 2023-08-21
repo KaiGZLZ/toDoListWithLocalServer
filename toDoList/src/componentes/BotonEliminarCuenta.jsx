@@ -29,7 +29,7 @@ function BotonEliminarCuenta(props) {
       password: password
     }
 
-    fetch(props.ipServer + '/user/delete', {
+    fetch(props.ipServer + 'user/delete', {
       method: 'DELETE', 
       body: JSON.stringify(userToDelete), 
       headers:{

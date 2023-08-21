@@ -27,7 +27,7 @@ function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormula
       password: password,
     }
 
-    const response = await fetch(apiUrl + '/user/authenticate', {
+    const response = await fetch(apiUrl + 'user/authenticate', {
       method: 'POST', 
       body: JSON.stringify({userRequested}), 
       headers:{

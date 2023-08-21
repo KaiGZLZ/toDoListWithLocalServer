@@ -17,6 +17,7 @@ import BotonDeSalida from "./componentes/BotonDeSalida";
 import BotonEliminarCuenta from "./componentes/BotonEliminarCuenta";
 
 import { apiUrl } from './config/config';
+import LoginPage from "./views/LoginPage";
 
 
 function App() {
@@ -98,6 +99,8 @@ function App() {
     <>
       <Router>
         <Switch>
+          {/*<Route exact path="/" element={<LoginPage />} />*/}
+          
           <Route path="/user/:username" element={
             <>
               <BotonOrdenamiento

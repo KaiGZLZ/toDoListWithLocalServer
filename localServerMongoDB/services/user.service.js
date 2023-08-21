@@ -84,12 +84,8 @@ let userService = {
     userAuthenticate: async (data) => {
         
         const userRequested = data.userRequested;
-
-        console.log({userRequested});
-        
+                        
         const userSaved = await User.findOne({ name: userRequested.name })
-
-        console.log(userSaved);
 
         if (!userSaved){
             throw('Therre is a problem with the name or the password')

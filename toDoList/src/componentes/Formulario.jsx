@@ -40,7 +40,7 @@ function Formulario(props){
       } */
     }
 
-    fetch(props.ipServer + '/task/register', {
+    fetch(props.ipServer + 'task/register', {
       method: 'POST', 
       body: JSON.stringify(dataToSend), 
       headers:{

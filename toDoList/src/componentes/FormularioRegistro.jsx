@@ -3,9 +3,13 @@ import { useState } from "react";
 import { AiFillCloseCircle, AiFillPlaySquare } from 'react-icons/ai';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
 import { apiUrl } from '../config/config';
+import { useLazyRegisterUserQuery } from '../services/user.service';
+import { useEffect } from 'react';
 
 
 function FormularioRegistro( { isOpen, cerrarFormulario} ) {
+
+  const [trigger, {data, isLoading, isSuccess, error}] = useLazyRegisterUserQuery()
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +27,7 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
   const manejarCambiosClave = e => { setPassword(e.target.value.trim()) };
   
   const manejarCambiosPasswordConfirmation = e => { 
-    {(e.target.value.trim() == password) ? setEstadoMensajeOcultoPasswordConfirmation(true) : setEstadoMensajeOcultoPasswordConfirmation(false)} 
+    {(e.target.value.trim() === password) ? setEstadoMensajeOcultoPasswordConfirmation(true) : setEstadoMensajeOcultoPasswordConfirmation(false)} 
     setPasswordConfirmation(e.target.value.trim());
   };
 
@@ -31,7 +35,7 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
     
     e.preventDefault();
 
-    if (username == ""){
+    if (username === ""){
       return setEstadoMensajeOcultoNombreVacio(false);
     }
 
@@ -49,21 +53,28 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
       passwordConfirmation
     }
 
-    fetch( apiUrl + '/user/register', {
-      method: 'POST', 
-      body: JSON.stringify({user}), 
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    }).then(res => res.json())
-    .catch(error => console.error('Error:', error))
-    .then(response => {
-      if (response.result === false) {setEstadoMensajeUsuarioExistenteOculto(false)}
+    trigger(user);
+  }
 
-      else{ 
-        registroExitoso()
-      }
-    });
+  
+  useEffect(() => {
+
+    if (isSuccess){
+      console.log({data});
+      registerSuccess()
+    }
+    
+    if(error){
+      console.log({error});
+      setEstadoMensajeUsuarioExistenteOculto(false)
+    }
+    
+  }, [isLoading]);
+
+
+  const clickException = (e) => {  //  El click no se propaga hacia atras
+    
+    e.stopPropagation();
   }
 
   const outOfModal = () => {  //  Al salir del modal, se resetea todo
@@ -80,13 +91,7 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
   }
 
 
-  const clickException = (e) => {  //  El click no se propaga hacia atras
-    
-    e.stopPropagation();
-  }
-
-
-  const registroExitoso = () => {
+  const registerSuccess = () => {
     setEstadoMensajeRegistroExitoso(true);
     setTimeout(outOfModal, 2000);
   }
@@ -133,7 +138,9 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
                 </p>
               </div>
               
-              <button className={styles.botonSubmit} onClick={sendRegisterData}> Registrar </button>
+              <button className={styles.botonSubmit} disabled={isLoading} onClick={sendRegisterData}> 
+                { isLoading && <div class='spinner'></div> }Registrar 
+              </button>
             </form>
           </div>
       </div>

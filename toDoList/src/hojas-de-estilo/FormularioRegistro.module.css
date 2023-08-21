@@ -130,6 +130,8 @@
 }
 
 .botonSubmit {
+    display: flex;
+    flex-direction: row;
     font-size: 100%;   
     color: white; 
     background-color: rgb(197, 24, 24);
