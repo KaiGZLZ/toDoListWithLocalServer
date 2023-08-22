@@ -2,10 +2,10 @@ import styles from '../hojas-de-estilo/FormularioInicioSesion.module.css'
 import { useState } from "react";
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { useNavigate } from "react-router-dom";
-import { apiUrl } from '../config/config';
+import { apiUrl, passphrase } from '../config/config';
+import CryptoJS from "crypto-js"
 
-
-function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormulario} ){
+function FormularioInicioSesion( { isOpen, cerrarFormulario} ){
 
   const navigate = useNavigate(); //  Hook para cambiar el path del navegador
 
@@ -39,8 +39,14 @@ function FormularioInicioSesion( { isOpen, obtenerTareasDeUsuario, cerrarFormula
       if (response.ok) {
 
         let result = JSON.parse(data)
-        obtenerTareasDeUsuario(result.user.tasks);
-        navigate('/user/'+ username);
+        
+        // almacenar detalles de usuario y token jwt en almacenamiento local para mantener al usuario conectado entre actualizaciones de página
+        var cryptUser = CryptoJS.AES.encrypt(JSON.stringify(result.user), passphrase).toString();
+
+        localStorage.setItem('user', cryptUser);
+        
+        //obtenerTareasDeUsuario(result.user.tasks);
+        navigate('/dashboard');
       }
       else{
         console.log(JSON.parse(data));

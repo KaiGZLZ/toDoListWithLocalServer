@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../hojas-de-estilo/Formulario.css"
-//import { useState } from "react";
 import { v4 as uuidv4} from "uuid"
-import { useParams } from "react-router-dom";
+import { useLazyRegisterTaskQuery } from "../services/task.service";
+import { useDispatch } from "react-redux";
+import { setTasks } from "../redux/userSlice";
 
-function Formulario(props){
+function Formulario(){
 
-  const params = useParams();
+  const dispatch = useDispatch();
+
+  const [registerTask, {data, isFetching, isSuccess, error}] = useLazyRegisterTaskQuery();
 
   const [toDo, setToDo] = useState(
     {
@@ -16,15 +19,13 @@ function Formulario(props){
       priority: ''
     }
   );
-  
-  //const [nombreTareaEstado, setInput] = useState('');
 
-  const sendData = e => {  //  Al presionar el boton
+  // When the button is pressed
+  const sendData = e => {
 
     e.preventDefault();
 
-    const dataToSend = {
-      name: params.username,
+    const data = {
       task: {
         id: uuidv4(),
         title: toDo.title.trim(), 
@@ -32,34 +33,23 @@ function Formulario(props){
         responsible: toDo.responsible.trim(),
         priority: (toDo.priority === '' ? 0 : toDo.priority)
       }
-    /*  NOTA: Si los campos tuviesen el mismo nombre, se pudiesen colocar de la siguiente manera
-      tarea: {
-        id: uuidv4(), ...tarea
-
-        pero se prefirió dejar de esta manera ya que es más sencillo de entender
-      } */
     }
-
-    fetch(props.ipServer + 'task/register', {
-      method: 'POST', 
-      body: JSON.stringify(dataToSend), 
-      headers:{
-      'Content-Type': 'application/json'
-    }
-    }).then(res => res.json())
-        .then(response => { 
-          console.log(response.description) 
-          
-          if (response.result === true){
-            props.onSubmit(dataToSend.task); //  Se borra en la pantalla*/
-            setToDo({...toDo, ...{title: '', description: '', responsible: '', priority: ''} });
-          }
-          else{
-            alert('The ToDo must have Title and Priority')
-          }
-        })
-        .catch(error => console.error('Error:', error));
+    registerTask(data)
   }
+
+  // Handle fetch results
+  useEffect(() => {
+
+    if(isSuccess){
+      
+      dispatch(setTasks([...data.tasks]))
+      setToDo({...toDo, ...{title: '', description: '', responsible: '', priority: ''} });
+    }
+
+    if (error){
+      console.log({error});
+    }    
+  }, [isFetching]);
 
   return(
     <div>
@@ -100,7 +90,9 @@ function Formulario(props){
             </div>
           </div>
         </div>
-        <button className='boton-submit' onClick={sendData}> Enviar </button>
+        <button className='boton-submit' disabled={isFetching} onClick={sendData}> 
+          { isFetching && <div className='spinner'></div> }Enviar 
+        </button>
       </form>
       </div>
     </div>

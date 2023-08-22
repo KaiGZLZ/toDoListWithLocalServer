@@ -1,8 +1,16 @@
 import React from "react";
+import { useState } from 'react';
 import "../hojas-de-estilo/Formulario.css"
+import styles from '../hojas-de-estilo/CuadroInicio.module.css'
+import { apiUrl } from "../config/config";
+import FormularioInicioSesion from "../componentes/FormularioInicioSesion";
+import FormularioRegistro from "../componentes/FormularioRegistro";
+
 
 function LoginPage(){
 
+  const [loginFormState, setLoginFormState] = useState(false);
+  const [registerFormState, setRegisterFormState] = useState(false);
 
   return( <>
     
@@ -44,13 +52,41 @@ function LoginPage(){
       </div>
     </div>
 
-    
-    
-    
-    
-    
-    
-    </>
+    {/* Login section */}
+    <div className={styles.contenedorPrincipal}>
+
+      <div className={styles.controlEspacio}>
+        {/* Empty div */}
+      </div>
+
+      <div className={styles.contenedorBotones}>
+
+        <button 
+          className={styles.botonIniciarSesion + " " + styles.prototipoBoton} 
+          onClick={() => {setLoginFormState(!loginFormState)}}>
+            Iniciar sesion
+        </button>
+        
+
+        <FormularioInicioSesion
+          isOpen={loginFormState}
+          cerrarFormulario={setLoginFormState}
+          apiUrl={apiUrl}
+          />
+
+        <button 
+          className={styles.botonRegistrarse + " " + styles.prototipoBoton}
+          onClick={() => setRegisterFormState(!registerFormState)}>
+            Registrarse
+        </button>
+        
+        <FormularioRegistro
+          isOpen={registerFormState}
+          cerrarFormulario={setRegisterFormState}
+          />
+      </div>
+    </div>
+  </>
     
   );
 }

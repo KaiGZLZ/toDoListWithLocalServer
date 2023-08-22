@@ -1,0 +1,4 @@
+﻿{
+    "connectionString": "mongodb://localhost/fattoria",
+    "secret": "app-development-22052020"
+}

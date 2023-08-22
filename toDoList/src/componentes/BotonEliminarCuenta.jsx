@@ -1,13 +1,18 @@
 import style from "../hojas-de-estilo/BotonEliminarCuenta.module.css"
-import { useNavigate, useParams} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { AiFillCloseCircle, AiOutlineWarning } from "react-icons/ai";
+import { useLazyDeleteUserQuery } from "../services/user.service";
+import { useDispatch } from "react-redux";
+import { setTasks } from "../redux/userSlice";
 
 
-function BotonEliminarCuenta(props) {
+function BotonEliminarCuenta() {
+
+  const [deleteUser, {data, isFetching, isSuccess, error}] = useLazyDeleteUserQuery();
 
   const navigate = useNavigate();
-  const { username } = useParams();
+  const dispatch = useDispatch();
   const [ password, setPasswordUser ] = useState("");
   const [ hiddenMessagePasswordState, setHiddenMessagePasswordState] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
@@ -24,27 +29,16 @@ function BotonEliminarCuenta(props) {
 
     e.preventDefault();
 
-    const userToDelete = {
-      name: username,      
-      password: password
-    }
-
-    fetch(props.ipServer + 'user/delete', {
-      method: 'DELETE', 
-      body: JSON.stringify(userToDelete), 
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    }).then(res => res.json())
-    .catch(error => console.error('Error:', error))
-    .then(response => {
-      if(response.result === false){
-        setHiddenMessagePasswordState(false);
-      } else {
-        console.log('Usuario Eliminado');
-        navigate('/');
-      }
-    });
+    deleteUser({ password: password })
+      .then((response) => {
+        if(response.data.data.result === false){
+          setHiddenMessagePasswordState(false);
+        } else {
+          console.log('Usuario Eliminado');
+          dispatch(setTasks([]))
+          navigate('/');
+        }
+      })
   }
 
   return(
@@ -81,7 +75,7 @@ function BotonEliminarCuenta(props) {
                 </p>
               </div>
               
-              <button className={style.botonSubmit} onClick={deleteAcount}> Eliminar cuenta </button>
+              <button className={style.botonSubmit} disabled={isFetching} onClick={deleteAcount}> Eliminar cuenta </button>
             </form>
           </div>
       </div>

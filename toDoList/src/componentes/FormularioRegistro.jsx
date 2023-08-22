@@ -1,15 +1,14 @@
 import styles from '../hojas-de-estilo/FormularioRegistro.module.css'
 import { useState } from "react";
-import { AiFillCloseCircle, AiFillPlaySquare } from 'react-icons/ai';
+import { AiFillCloseCircle } from 'react-icons/ai';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
-import { apiUrl } from '../config/config';
 import { useLazyRegisterUserQuery } from '../services/user.service';
 import { useEffect } from 'react';
 
 
 function FormularioRegistro( { isOpen, cerrarFormulario} ) {
 
-  const [trigger, {data, isLoading, isSuccess, error}] = useLazyRegisterUserQuery()
+  const [registerUser, {isFetching, isSuccess, error}] = useLazyRegisterUserQuery()
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -53,26 +52,26 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
       passwordConfirmation
     }
 
-    trigger(user);
+    registerUser(user);
   }
 
-  
+  // Handle fetch results
   useEffect(() => {
 
     if (isSuccess){
-      console.log({data});
-      registerSuccess()
+      setEstadoMensajeRegistroExitoso(true);
+      setTimeout(outOfModal, 2000);
     }
     
     if(error){
-      console.log({error});
       setEstadoMensajeUsuarioExistenteOculto(false)
-    }
+    }   
     
-  }, [isLoading]);
+  }, [isFetching]);
 
 
-  const clickException = (e) => {  //  El click no se propaga hacia atras
+  // Function to prevent the click from propagating backwards
+  const clickException = (e) => {
     
     e.stopPropagation();
   }
@@ -88,12 +87,6 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
     setEstadoMensajeOcultoPasswordConfirmation(true)
     setEstadoMensajeOcultoNombreVacio(true);
     cerrarFormulario(!isOpen);
-  }
-
-
-  const registerSuccess = () => {
-    setEstadoMensajeRegistroExitoso(true);
-    setTimeout(outOfModal, 2000);
   }
 
   return(
@@ -138,8 +131,8 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
                 </p>
               </div>
               
-              <button className={styles.botonSubmit} disabled={isLoading} onClick={sendRegisterData}> 
-                { isLoading && <div class='spinner'></div> }Registrar 
+              <button className={styles.botonSubmit} disabled={isFetching} onClick={sendRegisterData}> 
+                { isFetching && <div className='spinner'></div> }Registrar 
               </button>
             </form>
           </div>

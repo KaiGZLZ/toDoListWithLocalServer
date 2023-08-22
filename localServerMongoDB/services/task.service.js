@@ -3,6 +3,23 @@ const User = require('../Models/user.model');
 
 let taskService = {
 
+
+    /**
+     * Funtion to get all the tasks
+     * 
+     * @param {object} data
+     * 
+     */
+    taskGetAll: async (data) => {
+
+        const user = await User.findById(data._user._id).lean();
+        
+        return {    
+            tasks: [...user.tasks]
+        };
+    },
+
+
     /**
      * Funtion to register an task
      * 
@@ -14,16 +31,17 @@ let taskService = {
     taskRegister: async (data) => {
 
         const newTask = data.task;
-        //const user = data.user;
- 
-        const user = await User.findOne({name: data.name});
 
+        const user = await User.findById(data._user._id);
+        
         user.tasks.unshift(newTask);
     
-        await user.save();
-        return {
+        let userModified = await user.save();
+
+        return {    
             result: true, 
-            description:'Tarea agregada correctamente'
+            description:'Tarea agregada correctamente',
+            tasks: userModified.tasks
         };
     },
 
@@ -37,10 +55,9 @@ let taskService = {
      */
     taskDelete: async (data) => {
         
-        let usernameOwner = data.name;
         let idToToDoToDelete = data.idToDoToEliminate;
         
-        const user = await User.findOne({name: usernameOwner});
+        const user = await User.findById(data._user._id);
 
         if (user) {
 
@@ -53,7 +70,8 @@ let taskService = {
             
             return {
                 result: true, 
-                description:'Tarea eliminada correctamente'
+                description:'Tarea eliminada correctamente',
+                tasks: [...user.tasks]
             };
         }
         else {

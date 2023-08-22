@@ -2,6 +2,7 @@ const express = require('express');
 const server = express();
 const cors = require('cors');
 const { mongoose } = require('./database')
+const jwt = require('./__helpers/jwt');
 
 
 //  Models
@@ -14,6 +15,10 @@ const errorHandler = require('./__helpers/errorHandler');
 
 server.use(cors());
 server.use(express.json());
+
+
+// Use JWT authentication to secure the API
+server.use(jwt());
 
 
 // Principal Routes

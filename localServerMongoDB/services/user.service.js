@@ -1,7 +1,9 @@
 
+const jsonwebtoken = require('jsonwebtoken');
 const User = require('../Models/user.model');
 
 const bcrypt = require('bcryptjs');
+const config = require('../config.json');
 
 let userService = {
 
@@ -49,16 +51,13 @@ let userService = {
      */
     userDelete: async (data) => {
         
-        const usernameToDelete = data.name;
         const passwordUsernameToDelete = data.password;
 
-        const userSaved = await User.findOne({ name: usernameToDelete })
-
-        let result = bcrypt.compareSync(passwordUsernameToDelete, userSaved.password);
+        let result = bcrypt.compareSync(passwordUsernameToDelete, data._user.password);
        
         if (result) {
 
-            await User.findOneAndDelete({ name: usernameToDelete })
+            await User.findOneAndDelete({ name: data._user.name })
 
             return {
                 result: true, 
@@ -85,20 +84,25 @@ let userService = {
         
         const userRequested = data.userRequested;
                         
-        const userSaved = await User.findOne({ name: userRequested.name })
+        const user = await User.findOne({ name: userRequested.name })
 
-        if (!userSaved){
+        if (!user){
             throw('Therre is a problem with the name or the password')
         }
 
-        let result = bcrypt.compareSync(userRequested.password, userSaved.password);
+        let result = bcrypt.compareSync(userRequested.password, user.password);
 
         if (result){
-            return{
-                user: userSaved
-            }
+            const token = jsonwebtoken.sign({ sub: user.id }, config.secret);
+                        
+            return {
+                user:{
+                    ...user.toJSON(),
+                    token,
+                },
+            };
         }
-        else throw('The user was not found')
+        else throw('The user was not found');
     },
 }
 

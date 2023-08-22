@@ -1,22 +1,19 @@
 import Tarjeta from "./Tarjeta";
 import "../hojas-de-estilo/GridTareas.css";
 
-function GridTareas({ tareas , borrarTarea, ipServer}) {
+function GridTareas({ tasks }) {
 
   return(
     <ul className='grid-tareas'>
       {
-        tareas.map((tarea) =>
-          <Tarjeta  
-            key={tarea.id}
-            id={tarea.id}
-            titulo={tarea.title}
-            prioridad={tarea.priority}
-            descripcion={tarea.description}
-            responsable={tarea.responsible}      
-
-            onBorrar={borrarTarea}
-            ipServer={ipServer}
+        tasks.map((task) =>
+          <Tarjeta
+            key={task.id}
+            id={task.id}
+            titulo={task.title}
+            prioridad={task.priority}
+            descripcion={task.description}
+            responsable={task.responsible}
               />
         )
       };
