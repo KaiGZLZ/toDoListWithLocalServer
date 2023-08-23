@@ -9,7 +9,7 @@ import { setTasks } from "../redux/userSlice";
 
 function BotonEliminarCuenta() {
 
-  const [deleteUser, {data, isFetching, isSuccess, error}] = useLazyDeleteUserQuery();
+  const [deleteUser, { isFetching }] = useLazyDeleteUserQuery();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();

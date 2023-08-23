@@ -4,55 +4,21 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
 import { useLazyRegisterUserQuery } from '../services/user.service';
 import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 
 
 function FormularioRegistro( { isOpen, cerrarFormulario} ) {
 
   const [registerUser, {isFetching, isSuccess, error}] = useLazyRegisterUserQuery()
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const { register, handleSubmit, watch, reset, clearErrors, formState: { errors } } = useForm({ reValidateMode: "onSubmit" });
 
   const [estadoMensajeUsuarioExistenteOculto, setEstadoMensajeUsuarioExistenteOculto] = useState(true);
-  const [estadoMensajeOcultoClaveMenorOchoDigitos, setEstadoMensajeOcultoClaveMenorOchoDigitos] = useState(true);
-  const [estadoMensajeOcultoNombreVacio, setEstadoMensajeOcultoNombreVacio] = useState(true);
-  const [estadoMensajeOcultoPasswordConfirmation, setEstadoMensajeOcultoPasswordConfirmation] = useState(true);
+  const [estadoMensajeRegistroExitoso, setEstadoMensajeRegistroExitoso] = useState(false)  
 
-  const [estadoMensajeRegistroExitoso, setEstadoMensajeRegistroExitoso] = useState(false)
-  
-  
-  const manejarCambiosUsuario = e => { setUsername(e.target.value.trim()) };
-  const manejarCambiosClave = e => { setPassword(e.target.value.trim()) };
-  
-  const manejarCambiosPasswordConfirmation = e => { 
-    {(e.target.value.trim() === password) ? setEstadoMensajeOcultoPasswordConfirmation(true) : setEstadoMensajeOcultoPasswordConfirmation(false)} 
-    setPasswordConfirmation(e.target.value.trim());
-  };
-
-  const sendRegisterData = e => {  //  Al presionar el boton
+  const sendData = data => {  //  Al presionar el boton
     
-    e.preventDefault();
-
-    if (username === ""){
-      return setEstadoMensajeOcultoNombreVacio(false);
-    }
-
-    if (password.length < 8){
-      return setEstadoMensajeOcultoClaveMenorOchoDigitos(false);
-    }
-
-    if (password !== passwordConfirmation){
-      return setEstadoMensajeOcultoPasswordConfirmation(false)
-    }
-
-    const user = {
-      name: username,
-      password,
-      passwordConfirmation
-    }
-
-    registerUser(user);
+    registerUser(data);
   }
 
   // Handle fetch results
@@ -78,15 +44,10 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
 
   const outOfModal = () => {  //  Al salir del modal, se resetea todo
     
-    setUsername("");
-    setPassword("");
-    setPasswordConfirmation("");
     setEstadoMensajeRegistroExitoso(false);
     setEstadoMensajeUsuarioExistenteOculto(true);
-    setEstadoMensajeOcultoClaveMenorOchoDigitos(true);
-    setEstadoMensajeOcultoPasswordConfirmation(true)
-    setEstadoMensajeOcultoNombreVacio(true);
     cerrarFormulario(!isOpen);
+    reset();
   }
 
   return(
@@ -101,37 +62,66 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
               <AiFillCloseCircle />
             </div>
 
-            <form className={styles.formulario} >
+            <form className={styles.formulario} onSubmit={handleSubmit((sendData))}>
               
               <p className={styles.titulo}>
                 Registro <br/>de Usuario
               </p>
               
-              <input className={styles.entradaDeDatos} type="text" value={username} placeholder="Usuario" onChange={manejarCambiosUsuario}/>
-              
-              <div className={styles.cajita}>
-                <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeUsuarioExistenteOculto ? " " + styles.oculto : "")}>
-                  *El nombre de usuario ya es usado*
-                </p>
-                <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeOcultoNombreVacio ? " " + styles.oculto : "")}>
-                  *El nombre no debe estar vacio*
-                </p>
-              </div>
+              <input 
+                className={styles.entradaDeDatos } 
+                type="text"
+                placeholder="Usuario"
+                { ...register(
+                    "name",  
+                    { required: "The name field is required",
+                      validate: (value) => {
+                        if (value.includes(' ')) return "The name cannot have spaces";
+                      },
+                      onChange:() => clearErrors()
+                    }
+                  )
+                }
+                />
+              {errors.name && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.name.message}</span>}
+              {!estadoMensajeUsuarioExistenteOculto && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >*El nombre de usuario ya es usado*</span>}
+                            
+              <input 
+                className={styles.entradaDeDatos } 
+                type="password"
+                placeholder="Contraseña"
+                { ...register(
+                    "password",  
+                    { required: "The password field is required",
+                      validate: (value) => {
+                        if (value.includes(' ')) return "The password cannot have spaces";
+                        if (value.length < 8) return "The password length must be al least 8 characters";
+                      },
+                      onChange:() => clearErrors()
+                    }
+                  )
+                }
+                />
+              {errors.password && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.password.message}</span>}
+        
+              <input 
+                className={styles.entradaDeDatos } 
+                type="password"
+                placeholder="Confirme la contraseña"
+                { ...register(
+                    "passwordConfirmation",  
+                    { required: "The passwordConfirmation field is required",
+                      validate: (value) => {
+                        if (value != watch("password")) return "The password confirmation doesn´t match";
+                      },
+                      onChange:() => clearErrors()
+                    }
+                  )
+                }
+                />
+              {errors.passwordConfirmation && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.passwordConfirmation.message}</span>}
 
-              <input className={styles.entradaDeDatos} type="password" value={password} placeholder="Clave" onChange={manejarCambiosClave}/>
-              <div className={styles.cajita}>
-                <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeOcultoClaveMenorOchoDigitos ? " " + styles.oculto : "")}>
-                  *La contraseña debe ser de minimo 8 caracteres*
-                </p>
-              </div>
-              <input className={styles.entradaDeDatos} type="password" value={passwordConfirmation} placeholder="Confirme la clave" onChange={manejarCambiosPasswordConfirmation}/>
-              <div className={styles.cajita}>
-                <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeOcultoPasswordConfirmation ? " " + styles.oculto : "")}>
-                  *La confirmacion no coincide*
-                </p>
-              </div>
-              
-              <button className={styles.botonSubmit} disabled={isFetching} onClick={sendRegisterData}> 
+              <button className={styles.botonSubmit} disabled={isFetching} > 
                 { isFetching && <div className='spinner'></div> }Registrar 
               </button>
             </form>

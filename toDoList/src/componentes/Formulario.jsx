@@ -1,96 +1,112 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../hojas-de-estilo/Formulario.css"
+import styles from '../hojas-de-estilo/FormularioInicioSesion.module.css'
 import { v4 as uuidv4} from "uuid"
 import { useLazyRegisterTaskQuery } from "../services/task.service";
 import { useDispatch } from "react-redux";
 import { setTasks } from "../redux/userSlice";
+import { useForm } from "react-hook-form";
 
 function Formulario(){
 
   const dispatch = useDispatch();
 
-  const [registerTask, {data, isFetching, isSuccess, error}] = useLazyRegisterTaskQuery();
+  const [registerTask, { isFetching }] = useLazyRegisterTaskQuery();
 
-  const [toDo, setToDo] = useState(
-    {
-      title: '',
-      description: '',
-      responsible: '',
-      priority: ''
-    }
-  );
+  const { register, handleSubmit, reset, clearErrors, formState: { errors } } = useForm({ reValidateMode: "onSubmit" });
 
   // When the button is pressed
-  const sendData = e => {
+  const sendData = data => {
 
-    e.preventDefault();
-
-    const data = {
+    const dataToSend = {
       task: {
         id: uuidv4(),
-        title: toDo.title.trim(), 
-        description: toDo.description.trim(),
-        responsible: toDo.responsible.trim(),
-        priority: (toDo.priority === '' ? 0 : toDo.priority)
+        ...data
       }
     }
-    registerTask(data)
+    registerTask(dataToSend)
+      .then((response) => {
+
+        if(response.isSuccess){          
+          dispatch(setTasks([...response.data.tasks]));
+          reset();
+        }
+        else{
+          console.log(response.error);
+        }
+      })
   }
-
-  // Handle fetch results
-  useEffect(() => {
-
-    if(isSuccess){
-      
-      dispatch(setTasks([...data.tasks]))
-      setToDo({...toDo, ...{title: '', description: '', responsible: '', priority: ''} });
-    }
-
-    if (error){
-      console.log({error});
-    }    
-  }, [isFetching]);
 
   return(
     <div>
       <div className='formulario-contenedor'>
 
-      <form className="formulario" >
+      <form className="formulario" onSubmit={handleSubmit(sendData)}>
 
-        <input className="entrada-datos" type="text" 
-          value={toDo.title}
-          placeholder="Tarea" 
-          onChange={e => setToDo({...toDo, ...{title: e.target.value} })}
+        <input 
+          className={"entrada-datos" } 
+          type="text"
+          placeholder="Tarea"
+          { ...register(
+              "title",  
+              { required: "The title field is required",
+                setValueAs: value => value.trim(),
+                onChange:() => clearErrors(),
+              }
+            )
+          }
           />
-        <input className="entrada-datos" type="text" 
-          value={toDo.description}
-          placeholder="Descripcion" 
-          onChange={e => setToDo({...toDo, ...{description: e.target.value} })}
+        {errors.title && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.title.message}</span>}
+          
+        <input 
+          className={"entrada-datos" } 
+          type="text"
+          placeholder="Descripcion"
+          { ...register(
+              "description",  
+              { setValueAs: value => value.trim(),
+                onChange:() => clearErrors(),
+              }
+            )
+          }
           />
-        <input className="entrada-datos" type="text" 
-          value={toDo.responsible}
-          placeholder="Responsable" 
-          onChange={ e => setToDo({...toDo, ...{responsible: e.target.value} })}
+        {errors.description && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.description.message}</span>}
+
+        <input 
+          className={"entrada-datos" } 
+          type="text"
+          placeholder="Responsable"
+          { ...register(
+              "responsible",    
+              { required: "The responsible field is required",
+                setValueAs: value => value.trim(),
+                onChange:() => clearErrors(),
+              }
+            )
+          }
           />
+        {errors.responsible && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.responsible.message}</span>}
 
         <div className="opciones-prioridad">
           <p className="titulo-Prioridad">Prioridad</p>
           <div className="opciones-contenedor">
             <div className="opcion">
-              <input type="radio" id="prioridadAlta" name="prioridad" value={0} onClick={ e => setToDo({...toDo, ...{priority: e.target.value} })}/>
-              <label htmlFor="prioridadAlta"> Baja</label>
+              <input id="prioridadBaja" {...register("priority", { required: "The priority field is required" })} type="radio" value="1" />
+              <label htmlFor="prioridadBaja"> Baja</label>
             </div>
             <div className="opcion">
-              <input type="radio" id="prioridadMedia" name="prioridad" value={1} onClick={ e => setToDo({...toDo, ...{priority: e.target.value} })}/>
+              <input id="prioridadMedia" {...register("priority", { required: "The priority field is required" })} type="radio" value="2" />
               <label htmlFor="prioridadMedia"> Media</label>
             </div>
             <div className="opcion">
-              <input type="radio" id="prioridadBaja" name="prioridad" value={2} onClick={ e => setToDo({...toDo, ...{priority: e.target.value} })}/>
-              <label htmlFor="prioridadBaja"> Alta</label>
+              <input id="prioridadAlta" {...register("priority", { required: "The priority field is required" })} type="radio" value="3" />
+              <label htmlFor="prioridadAlta"> Alta</label>
             </div>
           </div>
         </div>
-        <button className='boton-submit' disabled={isFetching} onClick={sendData}> 
+        {errors.priority && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.priority.message}</span>}
+
+        <button className='boton-submit' disabled={isFetching}> 
           { isFetching && <div className='spinner'></div> }Enviar 
         </button>
       </form>

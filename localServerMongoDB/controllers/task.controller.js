@@ -1,11 +1,12 @@
 
 const express = require('express');
 const taskService = require('../services/task.service');
+const { taskRegisterValidation } = require('../validators/task.validator');
 const router = express.Router();
 
 // routes
 router.get('/getAll', taskGetAll);
-router.post('/register', taskRegister);
+router.post('/register', taskRegisterValidation, taskRegister);
 router.delete('/delete', taskDelete);
 
 module.exports = router;

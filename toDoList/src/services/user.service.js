@@ -11,7 +11,7 @@ export const userService = api.injectEndpoints({
                 }
             },
         }),
-        deleteAuthenticate: builder.query({
+        authenticateUser: builder.query({
             query(data) {
                 return {
                     url: `user/authenticate`,
@@ -35,8 +35,8 @@ export const userService = api.injectEndpoints({
 export const { 
     useRegisterUserQuery, 
     useLazyRegisterUserQuery,
-    useDeleteAuthenticateQuery,
-    useLazyDeleteAuthenticateQuery,
+    useAuthenticateUserQuery,
+    useLazyAuthenticateUserQuery,
     useDeleteUserQuery,
     useLazyDeleteUserQuery,
 

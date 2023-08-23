@@ -2,64 +2,47 @@ import styles from '../hojas-de-estilo/FormularioInicioSesion.module.css'
 import { useState } from "react";
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { useNavigate } from "react-router-dom";
-import { apiUrl, passphrase } from '../config/config';
+import { passphrase } from '../config/config';
 import CryptoJS from "crypto-js"
+import { useForm } from 'react-hook-form';
+import { useLazyAuthenticateUserQuery } from '../services/user.service';
 
 function FormularioInicioSesion( { isOpen, cerrarFormulario} ){
 
   const navigate = useNavigate(); //  Hook para cambiar el path del navegador
 
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [authenticateUser, { isFetching }] = useLazyAuthenticateUserQuery()
+  
+  const { register, handleSubmit, reset, clearErrors, formState: { errors } } = useForm({ reValidateMode: "onSubmit" });
 
   const [estadoMensajeOculto, setEstadoMensajeOculto] = useState(true);
   
-  
-  const manejarCambiosUsuario = e => { setUsername(e.target.value) };
-  const manejarCambiosClave = e => { setPassword(e.target.value) };
+  const sendData = userRequested => {  //  Al presionar el boton
+    
+    authenticateUser({userRequested})
+      .then((response) => {
 
+        if(response.isSuccess){
 
-  const enviarDatos = async e => {  //  Al presionar el boton
-    e.preventDefault();
-    const userRequested = {
-      name: username,
-      password: password,
-    }
+          var cryptUser = CryptoJS.AES.encrypt(JSON.stringify(response.data.user), passphrase).toString();
 
-    const response = await fetch(apiUrl + 'user/authenticate', {
-      method: 'POST', 
-      body: JSON.stringify({userRequested}), 
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    })
-
-    await response.text().then(data => {
-      if (response.ok) {
-
-        let result = JSON.parse(data)
-        
-        // almacenar detalles de usuario y token jwt en almacenamiento local para mantener al usuario conectado entre actualizaciones de página
-        var cryptUser = CryptoJS.AES.encrypt(JSON.stringify(result.user), passphrase).toString();
-
-        localStorage.setItem('user', cryptUser);
-        
-        //obtenerTareasDeUsuario(result.user.tasks);
-        navigate('/dashboard');
-      }
-      else{
-        console.log(JSON.parse(data));
-        setEstadoMensajeOculto(false)
-      }
-    })    
+          localStorage.setItem('user', cryptUser);
+          
+          navigate('/dashboard');
+        }
+        else{
+          setEstadoMensajeOculto(false)
+        }
+      })
+      .catch((error) => 
+        console.log(error)
+      )
   }
 
   const outOfModal = () => {
-    setUsername("");
-    setPassword("");
     setEstadoMensajeOculto(true);
     cerrarFormulario(!isOpen);
+    reset();
   }
 
   const clickException = (e) => {  //  El click no se propaga hacia atras
@@ -75,24 +58,46 @@ function FormularioInicioSesion( { isOpen, cerrarFormulario} ){
               <AiFillCloseCircle />
             </div>
 
-            <form className={styles.formulario} >
+            <form className={styles.formulario} onSubmit={handleSubmit(sendData)}>
               
               <p className={styles.titulo}>
                 Inicio de sesion
               </p>
               
-              <input className={styles.entradaDeDatos} 
-                type="text" value={username} 
-                placeholder="Usuario" 
-                onChange={manejarCambiosUsuario}
+              <input 
+                className={styles.entradaDeDatos } 
+                type="text"
+                placeholder="Usuario"
+                { ...register(
+                    "name",  
+                    { required: "The name field is required",
+                      validate: (value) => {
+                        if (value.includes(' ')) return "The name cannot have spaces";
+                      },
+                      onChange:() => clearErrors()
+                    }
+                  )
+                }
                 />
-                
-              <input className={styles.entradaDeDatos} 
-                type="password" 
-                value={password} 
-                placeholder="Clave" 
-                onChange={manejarCambiosClave}
+              {errors.name && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.name.message}</span>}
+                       
+              <input 
+                className={styles.entradaDeDatos } 
+                type="password"
+                placeholder="Contraseña"
+                { ...register(
+                    "password",  
+                    { required: "The password field is required",
+                      validate: (value) => {
+                        if (value.includes(' ')) return "The password cannot have spaces";
+                        if (value.length < 8) return "The password length must be al least 8 characters";
+                      },
+                      onChange:() => clearErrors()
+                    }
+                  )
+                }
                 />
+              {errors.password && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.password.message}</span>}
               
               <div className={styles.cajita}>
                 <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeOculto ? " " + styles.oculto : "")}>
@@ -100,7 +105,7 @@ function FormularioInicioSesion( { isOpen, cerrarFormulario} ){
                 </p>
               </div>
               
-              <button className={styles.botonSubmit} onClick={enviarDatos}> Ingresar </button>
+              <button disabled={isFetching} className={styles.botonSubmit}> Ingresar </button>
             </form>
           </div>
       </div>
