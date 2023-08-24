@@ -1,4 +1,4 @@
-# Getting Started with this To-Do App!
+# Getting Started with this VERY VERY COMPLETE To-Do App!
 
 - [Introduction](#introduction).
 - [First steps](#first-steps).
@@ -10,14 +10,9 @@
 
 ## Introduction
 
-The application is a ToDoList 📝 made in ReactJS for the Frontend and NodeJS with express for the Backend, for this reason the project is divided into two different folders, for each section. 
+This application may appear simple, right? But the truth is that it is quite complete since it is built in a way that allows scalability, it has authentication, error handling, validations, query handlers among many other things.
 
-There are two different Backends
-
-1.  localServer - It manages the information using in a single file, so reading is done by observing the saved data, and writing by overwriting the file
-2.  localServerMongoDB - It manages the information using a No-SQL database created with MongoDB, so it is necessary to have this database system installed.
-
-The project has different functionalities so it is quite complete for an initial project 
+Basically this scheme is based on one belonging to a much larger system belonging to one of the companies I worked for, and I can say that that system was very large. Even this new one has improvements and additional things that that one did not have, which makes it much more powerful, easy to understand and updated, so this small application can serve as a base scheme to start any project.
 
 
 
@@ -25,14 +20,6 @@ The project has different functionalities so it is quite complete for an initial
 
 Once the folder has been downloaded, proceed to access to the folders and install all the corresponding libraries and dependencies in each of the folders separately since in theory they are different projects using ```npm install```
 
-
-##  Running the server *localServer*
-
-Once the libraries and dependencies are installed, proceed to go to the "localServer" folder, to start the server.💻
-
-Once there, proceed to start the server with using ```node index.js```, or in case you have the nodemon library installed, you can then use ```nodemon index.js```. But that last one is in case you want to make changes to the file, so they will update immediately
- 
-And finally the server tasks will be active!! 🥳🥳
 
 
 ##  Running the server *localServerMongoDB*

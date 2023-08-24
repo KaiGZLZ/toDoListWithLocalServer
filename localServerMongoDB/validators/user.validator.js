@@ -4,7 +4,23 @@ const { validateUsername, validatePassword,  } = require("./commonValidations");
 module.exports = {
 
     userRegisterValidation: [
-        validateUsername('user.name'),
+        validateUsername('user.username'),
+        check('user.firstname')
+          .trim()
+          .escape()
+          .not()
+          .isEmpty()
+          .withMessage('User firstname can not be empty!')
+          .bail()
+        ,
+        check('user.lastname')
+          .trim()
+          .escape()
+          .not()
+          .isEmpty()
+          .withMessage('User lastname can not be empty!')
+          .bail()
+        ,
         validatePassword('user.password'),
         validatePassword('user.passwordConfirmation')
             .custom((value, { req }) => {
@@ -41,7 +57,7 @@ module.exports = {
     ],
 
     userAuthenticateValidation: [
-        validateUsername('userRequested.name'),
+        validateUsername('userRequested.username'),
         validatePassword('userRequested.password'),
         
         (req, res, next) => {

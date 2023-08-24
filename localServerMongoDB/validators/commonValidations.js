@@ -15,7 +15,7 @@ module.exports = commonValidations = {
             .escape()
             .not()
             .isEmpty()
-            .withMessage('User name can not be empty!')
+            .withMessage('User username can not be empty!')
             .bail()
             .custom((value) => {
                 return !value.includes(' ');
@@ -46,6 +46,31 @@ module.exports = commonValidations = {
             .withMessage('Username can not have white spaces!')
             .bail()
         ,
+
+
+        /**
+         * 
+         * @param {string} path - The name of the path that is going to be checked 
+         * @returns 
+         */
+        validateEmail: (path) => 
+            check(path)
+                .trim()
+                .escape()
+                .not()
+                .isEmpty()
+                .withMessage('User Email can not be empty!')
+                .bail()
+                .custom((value) => {
+                    return !value.includes(' ');
+                })
+                .withMessage('Email can´tt have white spaces!')
+                .bail()
+                .isEmail()
+                .withMessage('The word doesn´t correspond with an email')
+                .bail()
+        ,    
+        
 }
 
   

@@ -73,19 +73,47 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
                 type="text"
                 placeholder="Usuario"
                 { ...register(
-                    "name",  
-                    { required: "The name field is required",
+                    "username",  
+                    { required: "The username field is required",
                       validate: (value) => {
-                        if (value.includes(' ')) return "The name cannot have spaces";
+                        if (value.includes(' ')) return "The username cannot have spaces";
                       },
                       onChange:() => clearErrors()
                     }
                   )
                 }
                 />
-              {errors.name && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.name.message}</span>}
+              {errors.username && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.username.message}</span>}
               {!estadoMensajeUsuarioExistenteOculto && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >*El nombre de usuario ya es usado*</span>}
-                            
+                    
+              <input 
+                className={styles.entradaDeDatos } 
+                type="text"
+                placeholder="Nombre"
+                { ...register(
+                    "firstname",  
+                    { required: "The firstname field is required",
+                      onChange:() => clearErrors()
+                    }
+                  )
+                }
+                />
+              {errors.firstname && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.firstname.message}</span>}
+ 
+              <input 
+                className={styles.entradaDeDatos } 
+                type="text"
+                placeholder="Apellido"
+                { ...register(
+                    "lastname",  
+                    { required: "The lastname field is required",
+                      onChange:() => clearErrors()
+                    }
+                  )
+                }
+                />
+              {errors.lastname && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.lastname.message}</span>}
+
               <input 
                 className={styles.entradaDeDatos } 
                 type="password"
@@ -104,6 +132,24 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
                 />
               {errors.password && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.password.message}</span>}
         
+              <input 
+                className={styles.entradaDeDatos } 
+                type="text"
+                placeholder="Email"
+                { ...register(
+                    "email",  
+                    { required: "The email field is required",
+                      validate: (value) => {
+                        if (value.includes(' ')) return "The email cannot have spaces";
+                        if (!(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value))) return "Doesnt correspond with an email";
+                      },
+                      onChange:() => clearErrors()
+                    }
+                  )
+                }
+                />
+              {errors.email && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.email.message}</span>}
+
               <input 
                 className={styles.entradaDeDatos } 
                 type="password"

@@ -1,6 +1,7 @@
 const express = require('express');
 const server = express();
 const cors = require('cors');
+require('dotenv').config()
 const { mongoose } = require('./database')
 const jwt = require('./__helpers/jwt');
 
@@ -34,10 +35,10 @@ server.use('/task', require('./controllers/task.controller'));
 
 server.delete('/delete/user', async (req,res) => { //  Lo que sucede al momento de presionar "Eliminar Usuario" en el formulario de registro
 
-  let usernameToDelete = req.body.name;
+  let usernameToDelete = req.body.username;
   let passwordUsernameToDelete = req.body.password;
 
-  const user = await User.findOneAndDelete({name: usernameToDelete, password: passwordUsernameToDelete}).then();
+  const user = await User.findOneAndDelete({username: usernameToDelete, password: passwordUsernameToDelete}).then();
 
   if (user) {
     try {

@@ -69,17 +69,17 @@ function FormularioInicioSesion( { isOpen, cerrarFormulario} ){
                 type="text"
                 placeholder="Usuario"
                 { ...register(
-                    "name",  
-                    { required: "The name field is required",
+                    "username",  
+                    { required: "The username field is required",
                       validate: (value) => {
-                        if (value.includes(' ')) return "The name cannot have spaces";
+                        if (value.includes(' ')) return "The username cannot have spaces";
                       },
                       onChange:() => clearErrors()
                     }
                   )
                 }
                 />
-              {errors.name && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.name.message}</span>}
+              {errors.username && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.username.message}</span>}
                        
               <input 
                 className={styles.entradaDeDatos } 

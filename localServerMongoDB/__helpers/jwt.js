@@ -1,14 +1,13 @@
 const { expressjwt } = require('express-jwt');
 
-const config = require('../config.json');
-const userService = require('../services/user.service');
 const User = require('../Models/user.model');
+const config = require('../config')
 
 module.exports = jwt;
 
 function jwt() {
-    const secret = config.secret;
-    return expressjwt({ secret, algorithms: ["HS256"], isRevoked }).unless({
+    const secret = config.SECRET;
+    return expressjwt({ secret, algorithms: ["HS256"], isRevoked, onExpired }).unless({
         path: [
             // Public routes that do not require authentication
             '/user/authenticate',
@@ -29,3 +28,8 @@ async function isRevoked(req, {header, payload, signature}) {
     }
     else return true
 };
+
+async function onExpired (req, err) {
+    if (new Date() - err.inner.expiredAt < 5000) { return;}
+    throw err;
+}

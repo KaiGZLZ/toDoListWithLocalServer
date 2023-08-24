@@ -1,2 +1,4 @@
-export const apiUrl = 'http://localhost:4000/';
-export const passphrase = 'app-development-22052020';
+import env from "react-dotenv";
+
+export const apiUrl = env.API_URL ?? 'http://localhost:4000/';
+export const passphrase = env.PASSPHRASE ?? 'secret-word';

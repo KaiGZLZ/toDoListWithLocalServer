@@ -3,7 +3,7 @@ const jsonwebtoken = require('jsonwebtoken');
 const User = require('../Models/user.model');
 
 const bcrypt = require('bcryptjs');
-const config = require('../config.json');
+const config = require('../config');
 
 let userService = {
 
@@ -20,19 +20,16 @@ let userService = {
         const user = data.user;
 
         // Look if there is a user with the same name
-        const existingUser = await User.findOne({name: user.name});
+        const existingUser = await User.findOne({username: user.username});
 
-        if(existingUser) throw('Already exists this name');
+        if(existingUser) throw('Already exists this username');
 
         // If not, Register the new user
                 
-        var encryptedPassword = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
+        let encryptedPassword = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
+        user.password = encryptedPassword;
 
-        const newUser = new User({
-            name: user.name,
-            password: encryptedPassword,
-        })
-        
+        const newUser = new User(user)        
         await newUser.save()
 
         return {
@@ -57,7 +54,7 @@ let userService = {
        
         if (result) {
 
-            await User.findOneAndDelete({ name: data._user.name })
+            await User.findOneAndDelete({ username: data._user.username })
 
             return {
                 result: true, 
@@ -84,16 +81,16 @@ let userService = {
         
         const userRequested = data.userRequested;
                         
-        const user = await User.findOne({ name: userRequested.name })
+        const user = await User.findOne({ username: userRequested.username })
 
         if (!user){
-            throw('Therre is a problem with the name or the password')
+            throw('Therre is a problem with the username or the password')
         }
 
         let result = bcrypt.compareSync(userRequested.password, user.password);
 
         if (result){
-            const token = jsonwebtoken.sign({ sub: user.id }, config.secret);
+            const token = jsonwebtoken.sign({ sub: user.id }, config.SECRET, {expiresIn: 60 * 60}); // Expiration time: 1h
                         
             return {
                 user:{

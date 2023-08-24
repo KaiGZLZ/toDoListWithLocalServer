@@ -16,7 +16,7 @@ function errorHandler(err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
         // jwt error de autenticación
         //Token Inválido
-        return res.status(401).json({ message: 'Base de datos conectada port 4000' });
+        return res.status(401).json({ message: 'The token authorization is wrong or expired. Please login again' });
     }
  
     // default 500 server error
