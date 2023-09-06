@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { api } from '../services/api.service'
 import userReducer from "../redux/userSlice"
+import alertReducer from "../redux/alertSlice"
 
 // Or from '@reduxjs/toolkit/query/react'
 
@@ -10,6 +11,7 @@ export const store = configureStore({
 
     // Add the reducers
     user: userReducer,
+    alert: alertReducer,
 
     // Add the api reducer
     [api.reducerPath]: api.reducer,

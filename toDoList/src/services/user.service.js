@@ -12,11 +12,11 @@ export const userService = api.injectEndpoints({
             },
         }),
         authenticateUser: builder.query({
-            query(data) {
+            query(token) {
                 return {
                     url: `user/authenticate`,
                     method: 'POST',
-                    body: JSON.stringify({...data}),
+                    body: JSON.stringify({token}), 
                 }
             },
         }),
@@ -25,6 +25,33 @@ export const userService = api.injectEndpoints({
                 return {
                     url: `user/delete`,
                     method: 'DELETE',
+                    body: JSON.stringify({...data}),
+                }
+            },
+        }),
+        loginUser: builder.query({
+            query(data) {
+                return {
+                    url: `user/login`,
+                    method: 'POST',
+                    body: JSON.stringify({...data}),
+                }
+            },
+        }),
+        ForgottenPasswordUser: builder.query({
+            query(data) {
+                return {
+                    url: `user/forgotten-password`,
+                    method: 'POST',
+                    body: JSON.stringify({...data}),
+                }
+            },
+        }),
+        ChangePasswordUser: builder.query({
+            query(data) {
+                return {
+                    url: `user/change-password`,
+                    method: 'POST',
                     body: JSON.stringify({...data}),
                 }
             },
@@ -39,6 +66,13 @@ export const {
     useLazyAuthenticateUserQuery,
     useDeleteUserQuery,
     useLazyDeleteUserQuery,
+    useLoginUserQuery,
+    useLazyLoginUserQuery,
+    useForgottenPasswordUserQuery,
+    useLazyForgottenPasswordUserQuery,
+    useChangePasswordUserQuery,
+    useLazyChangePasswordUserQuery,
+    
 
 } = userService;
 

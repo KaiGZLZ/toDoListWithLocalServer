@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 
 function FormularioRegistro( { isOpen, cerrarFormulario} ) {
 
-  const [registerUser, {isFetching, isSuccess, error}] = useLazyRegisterUserQuery()
+  const [registerUser, {isFetching, isSuccess, error: errorRegisteringUser}] = useLazyRegisterUserQuery()
 
   const { register, handleSubmit, watch, reset, clearErrors, formState: { errors } } = useForm({ reValidateMode: "onSubmit" });
 
@@ -29,7 +29,7 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
       setTimeout(outOfModal, 2000);
     }
     
-    if(error){
+    if(errorRegisteringUser){
       setEstadoMensajeUsuarioExistenteOculto(false)
     }   
     
@@ -84,7 +84,6 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
                 }
                 />
               {errors.username && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.username.message}</span>}
-              {!estadoMensajeUsuarioExistenteOculto && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >*El nombre de usuario ya es usado*</span>}
                     
               <input 
                 className={styles.entradaDeDatos } 
@@ -116,24 +115,6 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
 
               <input 
                 className={styles.entradaDeDatos } 
-                type="password"
-                placeholder="Contraseña"
-                { ...register(
-                    "password",  
-                    { required: "The password field is required",
-                      validate: (value) => {
-                        if (value.includes(' ')) return "The password cannot have spaces";
-                        if (value.length < 8) return "The password length must be al least 8 characters";
-                      },
-                      onChange:() => clearErrors()
-                    }
-                  )
-                }
-                />
-              {errors.password && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.password.message}</span>}
-        
-              <input 
-                className={styles.entradaDeDatos } 
                 type="text"
                 placeholder="Email"
                 { ...register(
@@ -153,6 +134,24 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
               <input 
                 className={styles.entradaDeDatos } 
                 type="password"
+                placeholder="Contraseña"
+                { ...register(
+                    "password",  
+                    { required: "The password field is required",
+                      validate: (value) => {
+                        if (value.includes(' ')) return "The password cannot have spaces";
+                        if (value.length < 8) return "The password length must be al least 8 characters";
+                      },
+                      onChange:() => clearErrors()
+                    }
+                  )
+                }
+                />
+              {errors.password && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.password.message}</span>}
+        
+              <input 
+                className={styles.entradaDeDatos } 
+                type="password"
                 placeholder="Confirme la contraseña"
                 { ...register(
                     "passwordConfirmation",  
@@ -167,6 +166,14 @@ function FormularioRegistro( { isOpen, cerrarFormulario} ) {
                 />
               {errors.passwordConfirmation && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.passwordConfirmation.message}</span>}
 
+              { errorRegisteringUser && <>
+                <div className={styles.cajita}>
+                    <p className={styles.avisoUsuarioOContraseñaIncorrecta}>
+                      {errorRegisteringUser.data?.message ?? errorRegisteringUser.error}
+                    </p>
+                </div>
+              </>
+              }
               <button className={styles.botonSubmit} disabled={isFetching} > 
                 { isFetching && <div className='spinner'></div> }Registrar 
               </button>

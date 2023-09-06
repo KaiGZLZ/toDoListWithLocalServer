@@ -70,14 +70,14 @@ let taskService = {
             
             return {
                 result: true, 
-                description:'Tarea eliminada correctamente',
+                description:'Task deleted successfully',
                 tasks: [...user.tasks]
             };
         }
         else {
             return {
                 result: false, 
-                description:'El usuario no existe'
+                description:'Username does not exist'
             };
         }
     },

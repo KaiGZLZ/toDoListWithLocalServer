@@ -1,25 +1,22 @@
 import styles from '../hojas-de-estilo/FormularioInicioSesion.module.css'
-import { useState } from "react";
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { passphrase } from '../config/config';
 import CryptoJS from "crypto-js"
 import { useForm } from 'react-hook-form';
-import { useLazyAuthenticateUserQuery } from '../services/user.service';
+import { useLazyLoginUserQuery } from '../services/user.service';
 
 function FormularioInicioSesion( { isOpen, cerrarFormulario} ){
 
   const navigate = useNavigate(); //  Hook para cambiar el path del navegador
 
-  const [authenticateUser, { isFetching }] = useLazyAuthenticateUserQuery()
+  const [loginUser, { isFetching, error: errorLoggin }] = useLazyLoginUserQuery()
   
   const { register, handleSubmit, reset, clearErrors, formState: { errors } } = useForm({ reValidateMode: "onSubmit" });
-
-  const [estadoMensajeOculto, setEstadoMensajeOculto] = useState(true);
   
   const sendData = userRequested => {  //  Al presionar el boton
     
-    authenticateUser({userRequested})
+    loginUser({userRequested})
       .then((response) => {
 
         if(response.isSuccess){
@@ -31,7 +28,7 @@ function FormularioInicioSesion( { isOpen, cerrarFormulario} ){
           navigate('/dashboard');
         }
         else{
-          setEstadoMensajeOculto(false)
+          console.log(response);
         }
       })
       .catch((error) => 
@@ -40,7 +37,6 @@ function FormularioInicioSesion( { isOpen, cerrarFormulario} ){
   }
 
   const outOfModal = () => {
-    setEstadoMensajeOculto(true);
     cerrarFormulario(!isOpen);
     reset();
   }
@@ -98,13 +94,17 @@ function FormularioInicioSesion( { isOpen, cerrarFormulario} ){
                 }
                 />
               {errors.password && <span className={styles.avisoUsuarioOContraseñaIncorrecta}  >{errors.password.message}</span>}
-              
-              <div className={styles.cajita}>
-                <p className={styles.avisoUsuarioOContraseñaIncorrecta + (estadoMensajeOculto ? " " + styles.oculto : "")}>
-                  *El usuario o la contraseña ingresada fueron incorrectos*
-                </p>
-              </div>
-              
+
+              <Link to="/forgotten-password" className={styles.avisoUsuarioOContraseñaIncorrecta} style={{color: "black", marginTop: "20px" , fontSize: "15px"}}>Unlock account / Forgot password </Link>
+                                  
+              { errorLoggin && <>
+                <div className={styles.cajita}>
+                    <p className={styles.avisoUsuarioOContraseñaIncorrecta}>
+                      {errorLoggin.data?.message ?? errorLoggin.error}
+                    </p>
+                </div>
+              </>
+              }
               <button disabled={isFetching} className={styles.botonSubmit}> Ingresar </button>
             </form>
           </div>

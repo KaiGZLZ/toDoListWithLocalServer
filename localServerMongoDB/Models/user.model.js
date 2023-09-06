@@ -20,6 +20,13 @@ const userSchema = new Schema (
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         
+        accountStatus: { type: Boolean, default: false },   // If the account is activated or not
+        activationToken: { type: String, default: "" },
+        
+        recoverPasswordToken: { type: String, default: "" },
+
+        tries: { type: Number, default: 0 },
+
         tasks: [taskSchema]
 
     }, {

@@ -1,5 +1,5 @@
 const {check, body, validationResult, ExpressValidator } = require("express-validator");
-const { validateUsername, validatePassword,  } = require("./commonValidations");
+const { validateUsername, validatePassword, validateEmail,  } = require("./commonValidations");
 
 module.exports = {
 
@@ -56,7 +56,7 @@ module.exports = {
         },
     ],
 
-    userAuthenticateValidation: [
+    userLoginValidation: [
         validateUsername('userRequested.username'),
         validatePassword('userRequested.password'),
         
@@ -67,7 +67,58 @@ module.exports = {
           next();
         },
     ],
+    
+    userAuthenticateValidation: [
+      body('token')
+          .trim()
+          .not()
+          .isEmpty()
+          .withMessage('Invalid activation token')
+          .bail(),
+          
+      (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+          return res.status(422).json({message: errors.array()[0].msg});
+        next();
+      },
+    ],
 
+    userForgotenPasswordValidation: [
+
+      validateEmail('data.email'),
+          
+      (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+          return res.status(422).json({message: errors.array()[0].msg});
+        next();
+      },
+    ],
+
+    userChangePasswordValidation: [
+
+      validatePassword('data.password'),
+      validatePassword('data.passwordConfirmation')
+        .custom((value, { req }) => {
+          return value === req.body.data.password;
+        })
+        .withMessage('The password confirmation does not match with the password!')
+        .bail(),
+      body('data.token')
+        .trim()
+        .not()
+        .isEmpty()
+        .withMessage('Invalid activation token')
+        .bail(),
+          
+      (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+          return res.status(422).json({message: errors.array()[0].msg});
+        next();
+      },
+    ],
 }
 
   

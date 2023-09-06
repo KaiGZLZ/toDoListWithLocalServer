@@ -1,15 +1,44 @@
-import React from "react";
-import { useState } from 'react';
+import React, { useEffect } from "react";
 import "../hojas-de-estilo/Formulario.css"
 import styles from '../hojas-de-estilo/CuadroInicio.module.css'
-import FormularioInicioSesion from "../componentes/FormularioInicioSesion";
-import FormularioRegistro from "../componentes/FormularioRegistro";
+import { CircularProgress } from "@mui/material";
+import { useLazyAuthenticateUserQuery } from "../services/user.service";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setAlert } from "../redux/alertSlice";
+import CryptoJS from "crypto-js"
+import { passphrase } from '../config/config';
 
 
-function LoginPage(){
+function AuthenticatingPage(){
 
-  const [loginFormState, setLoginFormState] = useState(false);
-  const [registerFormState, setRegisterFormState] = useState(false);
+  const [authenticateUser, { isFetching }] = useLazyAuthenticateUserQuery();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+
+    authenticateUser(location.hash.replace("#", ""))
+      .then((response) => {
+
+        if(response.isSuccess){  
+          dispatch(setAlert({type: "success", message: 'Your account was successfully verified'}))
+          var cryptUser = CryptoJS.AES.encrypt(JSON.stringify(response.data.user), passphrase).toString();
+
+          localStorage.setItem('user', cryptUser);
+          
+          navigate('/dashboard');
+        }
+        else{
+          let error = response.error.data
+          dispatch(setAlert({type: "error", message: error.message}))
+          navigate('/login')
+        }
+      })    
+
+  }, []);
 
   return( <>
     
@@ -46,7 +75,7 @@ function LoginPage(){
             </div>
           </div>
         </div>
-        <button className='boton-submit'> Enviar </button>
+        <button className='boton-submit' disabled> Enviar </button>
       </form>
       </div>
     </div>
@@ -58,35 +87,11 @@ function LoginPage(){
         {/* Empty div */}
       </div>
 
-      <div className={styles.contenedorBotones}>
-
-        <button 
-          className={styles.botonIniciarSesion + " " + styles.prototipoBoton} 
-          onClick={() => {setLoginFormState(!loginFormState)}}>
-            Iniciar sesion
-        </button>
-        
-
-        <FormularioInicioSesion
-          isOpen={loginFormState}
-          cerrarFormulario={setLoginFormState}
-          />
-
-        <button 
-          className={styles.botonRegistrarse + " " + styles.prototipoBoton}
-          onClick={() => setRegisterFormState(!registerFormState)}>
-            Registrarse
-        </button>
-        
-        <FormularioRegistro
-          isOpen={registerFormState}
-          cerrarFormulario={setRegisterFormState}
-          />
-      </div>
+      <CircularProgress  /> 
     </div>
   </>
     
   );
 }
 
-export default LoginPage;
+export default AuthenticatingPage;

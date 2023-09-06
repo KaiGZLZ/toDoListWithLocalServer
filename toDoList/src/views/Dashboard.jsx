@@ -77,14 +77,16 @@ function Dashboard() {
   useEffect(() => {
     getTasks()
       .then((response) => {
-        dispatch(setTasks([...response.data.tasks]))
+        if(response.isSuccess){
+          dispatch(setTasks([...response.data.tasks]))
+        }
       })
   }, []);
 
   return( <>
         <BotonOrdenamiento 
             onClick={orderTasksAction}
-            state={buttonState}/>       
+            state={buttonState}/>
 
         <Formulario />
 
